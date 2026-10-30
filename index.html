@@ -157,6 +157,23 @@
   .dn-theme-comments li { display: flex; flex-direction: column; gap: 2px; padding: var(--cds-pad-xs) 0 var(--cds-gap-sm); border-bottom: 1px solid var(--color-border-line); }
   .dn-cmt-text { margin: 0; font-size: var(--cds-font-size-body); color: var(--color-fg); white-space: pre-line; overflow-wrap: anywhere; }
   .dn-cmt-meta { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn [hidden] { display: none !important; }
+  .dn-reader { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); align-items: flex-start; }
+  .dn-story-nav { flex: 1 1 15rem; min-width: 0; display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .dn-story-panel { flex: 999 1 32rem; min-width: 0; display: flex; flex-direction: column; }
+  .dn-story-tab { appearance: none; font: inherit; text-align: left; cursor: pointer; color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); min-height: 44px; display: flex; flex-direction: column; gap: 2px; }
+  .dn-story-tab:hover { border-color: var(--color-fg-muted); }
+  .dn-story-tab[aria-selected="true"] { border-color: var(--color-fg); box-shadow: 0 0 0 1px var(--color-fg); }
+  .dn-story-tab:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+  .dn-story-tab-title { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+  .dn-story-tab-stat { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-story-tab-stat b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .dn-story-panel .dn-story-body { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
+  .dn-story-panel .dn-sentence { max-width: 72ch; }
+  @media (max-width: 48rem) {
+    .dn-story-nav { flex-basis: 100%; flex-direction: row; overflow-x: auto; padding-bottom: var(--cds-pad-xs); }
+    .dn-story-tab { flex: 0 0 13rem; }
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 </head>
@@ -184,6 +201,11 @@
       <span class="dn-tile-label">Non-members and former members</span>
       <span class="dn-tile-value dash-skeleton" data-draw="num" data-source="totals" data-field="nonMembers" data-row="0" data-fmt="int">—</span>
       <span class="dn-tile-note">Regular, occasional and former</span>
+    </div>
+    <div class="dn-tile" id="tile-kids">
+      <span class="dn-tile-label">Children at home (estimate)</span>
+      <span class="dn-tile-value"><span class="dn-tile-prefix">About</span> <span class="dash-skeleton" data-draw="num" data-source="totals" data-field="kidsRounded" data-row="0" data-fmt="int">—</span></span>
+      <span class="dn-tile-note"><b data-draw="num" data-source="totals" data-field="kidsCount" data-row="0" data-fmt="int">—</b> counted across age groups. About <b data-draw="num" data-source="totals" data-field="likelyCouples" data-row="0" data-fmt="int">—</b> couples seem to have both answered, so their children count once.</span>
     </div>
   </div>
 
@@ -242,9 +264,36 @@
   </section>
 
   <section class="dn-page" id="readout" role="tabpanel" aria-labelledby="tab-readout" hidden>
-    <p class="dn-section-note">Each story pulls together the questions about one part of the building, plus the written comments on the same topic. Problem ratings count only the people each item applies to. Responses are still coming in, so the numbers will shift before the survey closes.</p>
-    <div class="dn-stories">
-      <article class="dn-card dn-story dn-card-wide" id="story-overall">
+    <p class="dn-section-note">Each story pulls together the questions about one part of the building, plus the written comments on the same topic. Pick a story to read it; the full results for every question follow below. Problem ratings count only the people each item applies to, and the numbers will shift until the survey closes.</p>
+    <div class="dn-reader">
+      <div class="dn-story-nav" role="tablist" aria-label="Stories" aria-orientation="vertical">
+        <button type="button" class="dn-story-tab" role="tab" id="st-overall" data-story="overall" aria-controls="story-overall" aria-selected="true">
+          <span class="dn-story-tab-title">Across the building</span>
+          <span class="dn-story-tab-stat"><b data-draw="num" data-source="story" data-field="crowdChanged" data-row="0" data-fmt="pct">—</b> say crowding changed their plans at least sometimes</span>
+        </button>
+        <button type="button" class="dn-story-tab" role="tab" id="st-social-hall" data-story="social-hall" aria-controls="story-social-hall" aria-selected="false">
+          <span class="dn-story-tab-title">Social hall and simchas</span>
+          <span class="dn-story-tab-stat"><b data-draw="num" data-source="story" data-field="shKiddush" data-row="0" data-fmt="pct">—</b> call kiddush crowding a major problem</span>
+        </button>
+        <button type="button" class="dn-story-tab" role="tab" id="st-sanctuary" data-story="sanctuary" aria-controls="story-sanctuary" aria-selected="false">
+          <span class="dn-story-tab-title">Sanctuary and davening</span>
+          <span class="dn-story-tab-stat"><b data-draw="num" data-source="story" data-field="mainImportant" data-row="0" data-fmt="pct">—</b> rate the sanctuary essential or very important</span>
+        </button>
+        <button type="button" class="dn-story-tab" role="tab" id="st-youth" data-story="youth" aria-controls="story-youth" aria-selected="false">
+          <span class="dn-story-tab-title">Youth and young families</span>
+          <span class="dn-story-tab-stat">Better youth facilities is the #<b data-draw="num" data-source="story" data-field="youthOutcomeRank" data-row="0" data-fmt="int">—</b> outcome people want</span>
+        </button>
+        <button type="button" class="dn-story-tab" role="tab" id="st-access" data-story="access" aria-controls="story-access" aria-selected="false">
+          <span class="dn-story-tab-title">Safety, access and getting around</span>
+          <span class="dn-story-tab-stat">#<b data-draw="num" data-source="story" data-field="cSafetyRank" data-row="0" data-fmt="int">—</b> theme in the written comments</span>
+        </button>
+        <button type="button" class="dn-story-tab" role="tab" id="st-fund" data-story="fund" aria-controls="story-fund" aria-selected="false">
+          <span class="dn-story-tab-title">Building fund and communication</span>
+          <span class="dn-story-tab-stat"><b data-draw="num" data-source="story" data-field="timelineAgree" data-row="0" data-fmt="pct">—</b> of members are confident in the timeline</span>
+        </button>
+      </div>
+      <div class="dn-story-panel">
+      <article class="dn-card dn-story" id="story-overall" role="tabpanel" aria-labelledby="st-overall">
         <h3 class="dn-card-title">Across the building</h3>
         <div class="dn-story-body">
           <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="crowdChanged" data-row="0" data-fmt="pct">—</b> say crowding or lack of space led them to skip, leave early or change plans for davening, kiddush or a program at least sometimes in the past year, including <b data-draw="num" data-source="story" data-field="crowdOften" data-row="0" data-fmt="pct">—</b> who say often. The question covers all three, so this figure isn't tied to one space.</p>
@@ -252,7 +301,7 @@
         </div>
       </article>
 
-      <article class="dn-card dn-story" id="story-social-hall">
+      <article class="dn-card dn-story" id="story-social-hall" role="tabpanel" aria-labelledby="st-social-hall" hidden>
         <h3 class="dn-card-title">Social hall and simchas</h3>
         <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="kiddushGo" data-row="0" data-fmt="pct">—</b> say their family goes to kiddush in the Social Hall on a typical Shabbat. Of those it applies to, <b data-draw="num" data-source="story" data-field="shKiddush" data-row="0" data-fmt="pct">—</b> call crowding there a major problem, #<b data-draw="num" data-source="story" data-field="shKiddushRank" data-row="0" data-fmt="int">—</b> of the <b data-draw="num" data-source="story" data-field="problemCount" data-row="0" data-fmt="int">—</b> building problems, and <b data-draw="num" data-source="story" data-field="shNoise" data-row="0" data-fmt="pct">—</b> say the same about the noise (#<b data-draw="num" data-source="story" data-field="shNoiseRank" data-row="0" data-fmt="int">—</b>). Not enough space to host simchas and events is #<b data-draw="num" data-source="story" data-field="simchaSpaceRank" data-row="0" data-fmt="int">—</b> (<b data-draw="num" data-source="story" data-field="simchaSpace" data-row="0" data-fmt="pct">—</b>).</p>
         <p class="dn-sentence">In the priority questions, <b data-draw="num" data-source="story" data-field="shTop3" data-row="0" data-fmt="pct">—</b> put the social hall, kiddush and simcha space in their top three, and <b data-draw="num" data-source="story" data-field="shImportant" data-row="0" data-fmt="pct">—</b> rate it essential or very important. Being able to host simchas and events at the shul is the #<b data-draw="num" data-source="story" data-field="simchaOutcomeRank" data-row="0" data-fmt="int">—</b> outcome (<b data-draw="num" data-source="story" data-field="simchaOutcome" data-row="0" data-fmt="pct">—</b>).</p>
@@ -260,7 +309,7 @@
         <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cSocialHall" data-row="0" data-fmt="int">—</b> about kiddush or the social hall, <b data-draw="num" data-source="story" data-field="cSimchas" data-row="0" data-fmt="int">—</b> about hosting simchas.</p>
       </article>
 
-      <article class="dn-card dn-story" id="story-sanctuary">
+      <article class="dn-card dn-story" id="story-sanctuary" role="tabpanel" aria-labelledby="st-sanctuary" hidden>
         <h3 class="dn-card-title">Sanctuary and davening</h3>
         <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="mainTop3" data-row="0" data-fmt="pct">—</b> put the main sanctuary and davening spaces in their top three, and <b data-draw="num" data-source="story" data-field="mainImportant" data-row="0" data-fmt="pct">—</b> rate them essential or very important. As an outcome, a better davening experience is #<b data-draw="num" data-source="story" data-field="davenOutcomeRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="outcomeCount" data-row="0" data-fmt="int">—</b> (<b data-draw="num" data-source="story" data-field="davenOutcome" data-row="0" data-fmt="pct">—</b>).</p>
         <p class="dn-sentence">Of those each item applies to, <b data-draw="num" data-source="story" data-field="main9" data-row="0" data-fmt="pct">—</b> call crowding at the 9:00 minyan a major problem (#<b data-draw="num" data-source="story" data-field="main9Rank" data-row="0" data-fmt="int">—</b>), <b data-draw="num" data-source="story" data-field="annex" data-row="0" data-fmt="pct">—</b> say the same of the 8:15 minyan in the Annex (#<b data-draw="num" data-source="story" data-field="annexRank" data-row="0" data-fmt="int">—</b>; it applies to <b data-draw="num" data-source="story" data-field="annexBase" data-row="0" data-fmt="int">—</b> people), and <b data-draw="num" data-source="story" data-field="hallway" data-row="0" data-fmt="pct">—</b> flag noise and foot traffic in the hallway during the 9:00 minyan (#<b data-draw="num" data-source="story" data-field="hallwayRank" data-row="0" data-fmt="int">—</b>).</p>
@@ -269,7 +318,7 @@
         <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cSanctuary" data-row="0" data-fmt="int">—</b> about sanctuary seating, <b data-draw="num" data-source="story" data-field="cAnnex" data-row="0" data-fmt="int">—</b> about the Annex, <b data-draw="num" data-source="story" data-field="cWomen" data-row="0" data-fmt="int">—</b> about the women's section, <b data-draw="num" data-source="story" data-field="cNoise" data-row="0" data-fmt="int">—</b> about noise and decorum during davening, <b data-draw="num" data-source="story" data-field="cBeitMidrash" data-row="0" data-fmt="int">—</b> asking for a beit midrash.</p>
       </article>
 
-      <article class="dn-card dn-story" id="story-youth">
+      <article class="dn-card dn-story" id="story-youth" role="tabpanel" aria-labelledby="st-youth" hidden>
         <h3 class="dn-card-title">Youth and young families</h3>
         <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="kidsShare" data-row="0" data-fmt="pct">—</b> of respondents have children at home: <b data-draw="num" data-source="story" data-field="kidsUnder3" data-row="0" data-fmt="pct">—</b> have a child under 3 and <b data-draw="num" data-source="story" data-field="kidsK3" data-row="0" data-fmt="pct">—</b> a child in kindergarten through 3rd grade. On a typical Shabbat, <b data-draw="num" data-source="story" data-field="groupsShare" data-row="0" data-fmt="pct">—</b> say their family takes part in Groups and <b data-draw="num" data-source="story" data-field="totShare" data-row="0" data-fmt="pct">—</b> in Tot Shabbat.</p>
         <p class="dn-sentence">Of those it applies to, <b data-draw="num" data-source="story" data-field="youthMajor" data-row="0" data-fmt="pct">—</b> call the lack of youth group space a major problem (#<b data-draw="num" data-source="story" data-field="youthRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="problemCount" data-row="0" data-fmt="int">—</b>). <b data-draw="num" data-source="story" data-field="youthTop3" data-row="0" data-fmt="pct">—</b> put dedicated youth and children's spaces in their top three, <b data-draw="num" data-source="story" data-field="youthImportant" data-row="0" data-fmt="pct">—</b> rate them essential or very important, and better facilities and programming for children and youth is the #<b data-draw="num" data-source="story" data-field="youthOutcomeRank" data-row="0" data-fmt="int">—</b> outcome (<b data-draw="num" data-source="story" data-field="youthOutcome" data-row="0" data-fmt="pct">—</b>).</p>
@@ -277,7 +326,7 @@
         <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cYouth" data-row="0" data-fmt="int">—</b> about youth, groups and young families.</p>
       </article>
 
-      <article class="dn-card dn-story" id="story-access">
+      <article class="dn-card dn-story" id="story-access" role="tabpanel" aria-labelledby="st-access" hidden>
         <h3 class="dn-card-title">Safety, access and getting around</h3>
         <p class="dn-sentence">Of those each item applies to, <b data-draw="num" data-source="story" data-field="accessMajor" data-row="0" data-fmt="pct">—</b> call getting into and around the building a major problem (#<b data-draw="num" data-source="story" data-field="accessRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="problemCount" data-row="0" data-fmt="int">—</b>), <b data-draw="num" data-source="story" data-field="restroomsMajor" data-row="0" data-fmt="pct">—</b> say the same of restrooms (#<b data-draw="num" data-source="story" data-field="restroomsRank" data-row="0" data-fmt="int">—</b>) and <b data-draw="num" data-source="story" data-field="coatMajor" data-row="0" data-fmt="pct">—</b> of coat room space (#<b data-draw="num" data-source="story" data-field="coatRank" data-row="0" data-fmt="int">—</b>).</p>
         <p class="dn-sentence">Ease of movement is rated essential or very important by <b data-draw="num" data-source="story" data-field="easeImportant" data-row="0" data-fmt="pct">—</b>, and greater accessibility and ease of use is the #<b data-draw="num" data-source="story" data-field="accessOutcomeRank" data-row="0" data-fmt="int">—</b> outcome (<b data-draw="num" data-source="story" data-field="accessOutcome" data-row="0" data-fmt="pct">—</b>).</p>
@@ -285,7 +334,7 @@
         <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cSafety" data-row="0" data-fmt="int">—</b> about safety, accessibility and flow, <b data-draw="num" data-source="story" data-field="cComfort" data-row="0" data-fmt="int">—</b> about comfort and amenities.</p>
       </article>
 
-      <article class="dn-card dn-story dn-card-wide" id="story-fund">
+      <article class="dn-card dn-story" id="story-fund" role="tabpanel" aria-labelledby="st-fund" hidden>
         <h3 class="dn-card-title">Building fund and communication</h3>
         <div class="dn-story-body">
           <p class="dn-sentence">Only members answer the fund questions. <b data-draw="num" data-source="story" data-field="knewAsk" data-row="0" data-fmt="pct">—</b> knew about the $10,000 ask before the survey. <b data-draw="num" data-source="story" data-field="whyAgree" data-row="0" data-fmt="pct">—</b> agree they understand why the shul needs to expand, <b data-draw="num" data-source="story" data-field="trustAgree" data-row="0" data-fmt="pct">—</b> that they trust the leadership to make good decisions about the building, <b data-draw="num" data-source="story" data-field="whatAgree" data-row="0" data-fmt="pct">—</b> that they understand what the fund will pay for and <b data-draw="num" data-source="story" data-field="timelineAgree" data-row="0" data-fmt="pct">—</b> that the project will move forward on a reasonable timeline.</p>
@@ -294,6 +343,7 @@
         </div>
         <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cTransparency" data-row="0" data-fmt="int">—</b> asking for transparency, plans or updates, <b data-draw="num" data-source="story" data-field="cAffordability" data-row="0" data-fmt="int">—</b> about affordability or pressure to give, <b data-draw="num" data-source="story" data-field="cLeadership" data-row="0" data-fmt="int">—</b> about leadership and decision-making, <b data-draw="num" data-source="story" data-field="cFundraising" data-row="0" data-fmt="int">—</b> suggesting other ways to raise money.</p>
       </article>
+      </div>
     </div>
 
     <h3 class="dn-section-title" id="current-building">The current building</h3>
@@ -614,12 +664,36 @@
   dash.calc('totals', {
     inputs: ['responses', 'who'],
     title: 'Response totals',
-    description: 'All responses, members and everyone else, the member share, respondents with children at home, a floor on children at home (one per age group each respondent picked), and the outreach line used for Few responses tags.',
+    description: 'All responses, members and everyone else, the member share, respondents with children at home, an estimate of children at home, and the outreach line used for Few responses tags. The estimate counts one child per age group each respondent picked, then counts a likely couple\'s children once: a man and a woman who picked exactly the same age groups and also match on at least two of walking time, years in the community and age range.',
     fn: (responses, who) => {
       const total = responses.length;
       const members = responses.filter((r) => r['Membership'] === 'I am a member of Darchei Noam (individually or as part of a family membership)').length;
-      const ages = responses.map((r) => String(r['Children at home'] || '').split('\n').filter((v) => v && v !== 'No children living at home' && v !== 'Prefer not to say'));
-      const kidsAny = ages.filter((a) => a.length > 0).length;
+      const SKIP = ['No children living at home', 'Prefer not to say'];
+      const recs = responses.map((r) => {
+        const ages = String(r['Children at home'] || '').split('\n').filter((v) => v && !SKIP.includes(v)).sort();
+        return { g: r['Gender'], key: ages.join('|'), n: ages.length, w: r['Walk'] || '', y: r['Years in community'] || '', a: r['Age'] || '' };
+      });
+      const withKids = recs.filter((x) => x.n > 0);
+      const kidsAny = withKids.length;
+      const kidsCount = withKids.reduce((s, x) => s + x.n, 0);
+      const men = withKids.filter((x) => x.g === 'Male');
+      const women = withKids.filter((x) => x.g === 'Female');
+      const same = (p, q) => p !== '' && p === q;
+      const likely = (m, f) => m.key === f.key && (same(m.w, f.w) + same(m.y, f.y) + same(m.a, f.a)) >= 2;
+      const options = men.map((m) => women.map((f, j) => (likely(m, f) ? j : -1)).filter((j) => j >= 0));
+      const partner = new Array(women.length).fill(-1);
+      const pair = (i, seen) => {
+        for (const j of options[i]) {
+          if (seen.has(j)) continue;
+          seen.add(j);
+          if (partner[j] === -1 || pair(partner[j], seen)) { partner[j] = i; return true; }
+        }
+        return false;
+      };
+      let couples = 0;
+      men.forEach((m, i) => { if (pair(i, new Set())) couples += 1; });
+      const counted = partner.reduce((s, i, j) => s + (i === -1 ? 0 : women[j].n), 0);
+      const kidsEstimate = kidsCount - counted;
       return [{
         total,
         members,
@@ -627,7 +701,10 @@
         membersShare: total ? members / total : 0,
         kidsAny,
         kidsShare: total ? kidsAny / total : 0,
-        kidsCount: ages.reduce((s, a) => s + a.length, 0),
+        kidsCount,
+        likelyCouples: couples,
+        kidsEstimate,
+        kidsRounded: Math.round(kidsEstimate / 10) * 10,
         threshold: who.length ? who[0].threshold : null,
       }];
     },
@@ -1232,6 +1309,33 @@
   dash.onData(() => {
     document.querySelectorAll('.dn-cq').forEach((sel) => { sel.value = dash.params().cq ?? ''; });
   });
+
+  const dnStories = ['overall', 'social-hall', 'sanctuary', 'youth', 'access', 'fund'];
+  const dnStory = (id) => {
+    const pick = dnStories.includes(id) ? id : 'overall';
+    document.querySelectorAll('.dn-story-tab').forEach((b) => {
+      const on = b.dataset.story === pick;
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+    });
+    document.querySelectorAll('.dn-story-panel .dn-story').forEach((a) => { a.hidden = a.id !== 'story-' + pick; });
+  };
+  document.querySelectorAll('.dn-story-tab').forEach((b, i, all) => {
+    b.addEventListener('click', () => {
+      dnStory(b.dataset.story);
+      dash.setParams({ story: b.dataset.story === 'overall' ? null : b.dataset.story });
+    });
+    b.addEventListener('keydown', (e) => {
+      const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (!step) return;
+      e.preventDefault();
+      const next = all[(i + step + all.length) % all.length];
+      next.focus();
+      next.click();
+    });
+  });
+  dnStory(dash.params().story);
+  dash.onData(() => dnStory(dash.params().story));
 </script>
 <script>
   dash.__start({ responses: 'data/survey-responses.json', codes: 'data/comment-codes.json', themes: 'data/comment-themes.json' });
