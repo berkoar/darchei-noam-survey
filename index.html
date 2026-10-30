@@ -1,0 +1,1240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Darchei Noam Building Survey</title>
+<meta name="description" content="Live results of the Congregation Darchei Noam Building Expansion Survey.">
+<style>
+  :root {
+    --font-anthropic-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-anthropic-serif: Georgia, "Times New Roman", serif;
+    --page-bg: #f6f7f9;
+    --color-fg: #1b1f24;
+    --color-fg-muted: #5a6370;
+    --color-panel: #ffffff;
+    --color-border-line: #e2e5ea;
+    --color-warn: #9a5b00;
+    --color-bad: #c0392b;
+    --cds-text-secondary: #5a6370;
+    --cds-font-size-title: 1.75rem;
+    --cds-font-size-heading: 1.0625rem;
+    --cds-font-size-body: 0.9375rem;
+    --cds-font-size-caption: 0.8125rem;
+    --cds-font-weight-medium: 600;
+    --cds-gap-xs: 0.25rem;
+    --cds-gap-sm: 0.5rem;
+    --cds-gap-md: 1rem;
+    --cds-gap-lg: 1.5rem;
+    --cds-pad-xs: 0.25rem;
+    --cds-pad-sm: 0.5rem;
+    --cds-pad-md: 0.75rem;
+    --cds-pad-lg: 1.25rem;
+    --cds-radius: 8px;
+    --cds-chart-grid: #e9ecf0;
+    --cds-chart-axis: #b8bfc9;
+    --cds-chart-muted: #a7afba;
+    --cds-chart-status-critical: #c2412d;
+    --cds-surface-popover: #ffffff;
+    --cds-border: #d5dae1;
+    --cds-shadow-popover: 0 4px 16px rgba(20, 24, 31, 0.12);
+    --cds-dur-slow: 300ms;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page-bg: #121418;
+      --color-fg: #e8eaee;
+      --color-fg-muted: #a3abb7;
+      --color-panel: #1b1e24;
+      --color-border-line: #2e333b;
+      --color-warn: #f0b45a;
+      --color-bad: #ef6b5b;
+      --cds-text-secondary: #a3abb7;
+      --cds-chart-grid: #2a2f37;
+      --cds-chart-axis: #4a515c;
+      --cds-chart-muted: #6b7380;
+      --cds-chart-status-critical: #ef7a63;
+      --cds-surface-popover: #22262d;
+      --cds-border: #3a4049;
+      --cds-shadow-popover: 0 4px 16px rgba(0, 0, 0, 0.5);
+      color-scheme: dark;
+    }
+  }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--page-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); }
+  .dn-wrap { max-width: 75rem; margin: 0 auto; padding: 2rem 2rem 3rem; }
+  @media (max-width: 40rem) { .dn-wrap { padding: 1.25rem 1rem 2.5rem; } }
+  .dn-updated { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-foot { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dash-skeleton { position: relative; }
+  .dash-skeleton:empty { min-height: 1.2em; border-radius: var(--cds-radius); background: var(--cds-chart-grid); }
+  .dn-tile-value.dash-skeleton { color: transparent; background: var(--cds-chart-grid); border-radius: var(--cds-radius); }
+
+  .dn { font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-lg); }
+  .dn-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+  .dn-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+  .dn-take { margin: 0; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); max-width: 70ch; }
+  .dn-take b, .dn-sentence b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .dn-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: var(--cds-gap-md); }
+  .dn-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+  .dn-tile-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-tile-value { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; min-height: 1.3em; }
+  .dn-tile-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-tabs { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); border-bottom: 1px solid var(--color-border-line); }
+  .dn-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: var(--cds-pad-sm) var(--cds-pad-md); font: inherit; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); cursor: pointer; }
+  .dn-tab[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+  .dn-tab:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+  .dn-page { display: flex; flex-direction: column; gap: var(--cds-gap-lg); }
+  .dn-section-title { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .dn-section-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); max-width: 75ch; }
+  .dn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: var(--cds-gap-md); }
+  .dn-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+  .dn-card-wide { grid-column: 1 / -1; }
+  .dn-card-title { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .dn-card-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-bars { position: relative; display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-height: 6rem; }
+  .dn-bar-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px var(--cds-gap-sm); align-items: baseline; }
+  .dn-bar-label { font-size: var(--cds-font-size-caption); color: var(--color-fg); min-width: 0; overflow-wrap: anywhere; display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); align-items: baseline; }
+  .dn-bar-value { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dn-track { grid-column: 1 / -1; height: 10px; border-radius: var(--cds-radius); background: var(--cds-chart-grid); display: flex; overflow: hidden; }
+  .dn-seg { height: 100%; }
+  .dn-chip { font-size: var(--cds-font-size-caption); color: var(--color-warn); border: 1px solid currentColor; border-radius: 999px; padding: 0 var(--cds-pad-xs); line-height: 1.5; white-space: nowrap; }
+  .dn-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); margin: 0; padding: 0; list-style: none; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-legend li { display: flex; align-items: center; gap: var(--cds-gap-xs); }
+  .dn-key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+  .dn-key-1 { background: var(--cds-chart-status-critical); }
+  .dn-key-2 { background: var(--cds-chart-status-critical); opacity: .45; }
+  .dn-key-muted { background: var(--cds-chart-muted); }
+  .dn-key-main { background: var(--dn-c0, var(--color-fg)); }
+  .dn-key-main-light { background: var(--dn-c0, var(--color-fg)); opacity: .45; }
+  .dn-base { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+  .dn-chart { position: relative; min-height: 220px; }
+  .dn-chart svg { display: block; }
+  .dn-tip { position: absolute; z-index: 2; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); color: var(--color-fg); max-width: 16rem; }
+  .dn-tip-head { color: var(--cds-text-secondary); }
+  .dn-table-wrap { max-height: 22rem; overflow: auto; }
+  .dn-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .dn-table th { position: sticky; top: 0; background: var(--color-panel); text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); }
+  .dn-table td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); }
+  .dn-table .dn-num { text-align: right; }
+  .dn-sentence { margin: 0; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); }
+  .dn-sentences { display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .dn-failed { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); min-height: inherit; width: 100%; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-failed-dot { width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+  .dn [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+  .dn-stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cds-gap-md); }
+  @media (max-width: 48rem) { .dn-stories { grid-template-columns: minmax(0, 1fr); } }
+  .dn-story { gap: var(--cds-gap-md); }
+  .dn-story .dn-sentence { line-height: 1.55; }
+  .dn-story-comments { margin: 0; padding-top: var(--cds-pad-sm); border-top: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-story-comments b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .dn-filters { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-md); align-items: flex-end; }
+  .dn-filter { display: flex; flex-direction: column; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); min-width: 0; max-width: 100%; }
+  .dn-filter-grow { flex: 1 1 14rem; }
+  .dn-filter select, .dn-filter input { font: inherit; font-size: var(--cds-font-size-body); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); max-width: 100%; }
+  .dn-clear { font: inherit; font-size: var(--cds-font-size-caption); color: var(--color-fg); background: none; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); cursor: pointer; }
+  .dn-clear:focus-visible, .dn-theme-row:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+  .dn-theme-row { cursor: pointer; border-radius: var(--cds-radius); padding: var(--cds-pad-xs); margin: calc(-1 * var(--cds-pad-xs)); }
+  .dn-theme-row:hover { background: var(--cds-chart-grid); }
+  .dn-theme-row.is-picked { outline: 1px solid var(--color-fg); }
+  .dn-theme-desc { grid-column: 1 / -1; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-theme-quote { grid-column: 1 / -1; font-size: var(--cds-font-size-caption); color: var(--color-fg); font-style: italic; }
+  .dn-table-tall { max-height: 36rem; }
+  .dn-comments .dn-comment { white-space: pre-line; min-width: 14rem; }
+  .dn-comments .dn-nowrap { white-space: nowrap; }
+  .dn-comments .dn-tags { min-width: 8rem; }
+  .dn-muted { color: var(--color-fg-muted); }
+  .dn-comments td { vertical-align: top; }
+  .dn-story-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); }
+  .dn-tile-prefix { font-family: var(--font-anthropic-sans); font-size: var(--cds-font-size-body); color: var(--color-fg-muted); }
+  #card-themes .dn-bars { max-width: 60rem; }
+  .dn-theme-hint { grid-column: 1 / -1; font-size: var(--cds-font-size-caption); color: var(--color-fg); text-decoration: underline; text-underline-offset: 2px; }
+  .dn-theme-comments { padding: 0 0 var(--cds-pad-sm) var(--cds-pad-md); border-left: 2px solid var(--color-border-line); margin-left: var(--cds-pad-xs); }
+  .dn-theme-comments ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--cds-gap-sm); max-height: 32rem; overflow: auto; }
+  .dn-theme-comments li { display: flex; flex-direction: column; gap: 2px; padding: var(--cds-pad-xs) 0 var(--cds-gap-sm); border-bottom: 1px solid var(--color-border-line); }
+  .dn-cmt-text { margin: 0; font-size: var(--cds-font-size-body); color: var(--color-fg); white-space: pre-line; overflow-wrap: anywhere; }
+  .dn-cmt-meta { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+</head>
+<body>
+<div class="dn-wrap">
+<div class="dn">
+  <header class="dn-head" id="overview">
+    <h2 class="dn-title">Building Expansion Survey responses</h2>
+    <p class="dn-take"><b data-draw="num" data-source="totals" data-field="total" data-row="0" data-fmt="int">—</b> responses so far, <b data-draw="num" data-source="totals" data-field="membersShare" data-row="0" data-fmt="pct">—</b> of them from members. Groups with few responses are tagged in the breakdowns. The survey closes Sunday night, November 8.</p>
+    <p class="dn-updated" id="dn-updated" aria-live="polite">Loading the latest responses…</p>
+  </header>
+
+  <div class="dn-tiles">
+    <div class="dn-tile" id="tile-total">
+      <span class="dn-tile-label">Total responses</span>
+      <span class="dn-tile-value dash-skeleton" data-draw="num" data-source="totals" data-field="total" data-row="0" data-fmt="int">—</span>
+      <span class="dn-tile-note">One per adult</span>
+    </div>
+    <div class="dn-tile" id="tile-members">
+      <span class="dn-tile-label">Members</span>
+      <span class="dn-tile-value dash-skeleton" data-draw="num" data-source="totals" data-field="members" data-row="0" data-fmt="int">—</span>
+      <span class="dn-tile-note">Answered "I am a member"</span>
+    </div>
+    <div class="dn-tile" id="tile-nonmembers">
+      <span class="dn-tile-label">Non-members and former members</span>
+      <span class="dn-tile-value dash-skeleton" data-draw="num" data-source="totals" data-field="nonMembers" data-row="0" data-fmt="int">—</span>
+      <span class="dn-tile-note">Regular, occasional and former</span>
+    </div>
+  </div>
+
+  <nav class="dn-tabs" role="tablist" aria-label="Dashboard pages">
+    <button class="dn-tab" role="tab" id="tab-responding" data-tab="responding" aria-controls="responding" aria-selected="true" type="button">Who's responding</button>
+    <button class="dn-tab" role="tab" id="tab-readout" data-tab="readout" aria-controls="readout" aria-selected="false" type="button">What we're hearing</button>
+    <button class="dn-tab" role="tab" id="tab-comments" data-tab="comments" aria-controls="comments" aria-selected="false" type="button">Comments</button>
+    <button class="dn-tab" role="tab" id="tab-fund" data-tab="fund" aria-controls="fund" aria-selected="false" type="button">Building fund</button>
+  </nav>
+
+  <section class="dn-page" id="responding" role="tabpanel" aria-labelledby="tab-responding">
+    <article class="dn-card" id="card-daily">
+      <h3 class="dn-card-title">Responses by day</h3>
+      <p class="dn-card-note">Each bar counts the responses submitted that day, by the time Jotform records.</p>
+      <div class="dn-chart" data-draw="daily" data-source="daily"></div>
+    </article>
+
+    <h3 class="dn-section-title" id="breakdowns">Who has responded</h3>
+    <p class="dn-section-note">Share of all responses in each group. A <span class="dn-chip">Few responses</span> tag marks a group with fewer than <b data-draw="num" data-source="totals" data-field="threshold" data-row="0" data-fmt="int">—</b> responses, a prompt to consider direct outreach. "Prefer not to say" is never tagged.</p>
+    <div class="dn-grid">
+      <article class="dn-card" id="card-membership">
+        <h4 class="dn-card-title">Membership</h4>
+        <div class="dn-bars dash-skeleton" data-draw="who" data-dim="Membership" data-source="who"></div>
+      </article>
+      <article class="dn-card" id="card-gender">
+        <h4 class="dn-card-title">Gender</h4>
+        <p class="dn-card-note">With one response per adult, a big gap here suggests one spouse is answering for the household.</p>
+        <div class="dn-bars dash-skeleton" data-draw="who" data-dim="Gender" data-source="who"></div>
+      </article>
+      <article class="dn-card" id="card-age">
+        <h4 class="dn-card-title">Age</h4>
+        <div class="dn-bars dash-skeleton" data-draw="who" data-dim="Age" data-source="who"></div>
+      </article>
+      <article class="dn-card" id="card-kids">
+        <h4 class="dn-card-title">Children at home</h4>
+        <p class="dn-card-note">People can pick more than one age group, so shares add up to more than 100%.</p>
+        <div class="dn-bars dash-skeleton" data-draw="who" data-dim="Children at home" data-source="who"></div>
+      </article>
+      <article class="dn-card" id="card-minyan">
+        <h4 class="dn-card-title">Usual Shabbat morning minyan</h4>
+        <div class="dn-bars dash-skeleton" data-draw="who" data-dim="Usual minyan" data-source="who"></div>
+      </article>
+      <article class="dn-card" id="card-freq">
+        <h4 class="dn-card-title">Shabbat mornings a month at Darchei Noam</h4>
+        <div class="dn-bars dash-skeleton" data-draw="who" data-dim="Shabbat mornings a month" data-source="who"></div>
+      </article>
+      <article class="dn-card" id="card-tenure">
+        <h4 class="dn-card-title">Years in the community</h4>
+        <div class="dn-bars dash-skeleton" data-draw="who" data-dim="Years in community" data-source="who"></div>
+      </article>
+      <article class="dn-card" id="card-walk">
+        <h4 class="dn-card-title">Walk to shul</h4>
+        <div class="dn-bars dash-skeleton" data-draw="who" data-dim="Walk" data-source="who"></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="dn-page" id="readout" role="tabpanel" aria-labelledby="tab-readout" hidden>
+    <p class="dn-section-note">Each story pulls together the questions about one part of the building, plus the written comments on the same topic. Problem ratings count only the people each item applies to. Responses are still coming in, so the numbers will shift before the survey closes.</p>
+    <div class="dn-stories">
+      <article class="dn-card dn-story dn-card-wide" id="story-overall">
+        <h3 class="dn-card-title">Across the building</h3>
+        <div class="dn-story-body">
+          <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="crowdChanged" data-row="0" data-fmt="pct">—</b> say crowding or lack of space led them to skip, leave early or change plans for davening, kiddush or a program at least sometimes in the past year, including <b data-draw="num" data-source="story" data-field="crowdOften" data-row="0" data-fmt="pct">—</b> who say often. The question covers all three, so this figure isn't tied to one space.</p>
+          <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="roomOutcome" data-row="0" data-fmt="pct">—</b> chose room for more members and families to join as one of the outcomes that matter most (#<b data-draw="num" data-source="story" data-field="roomOutcomeRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="outcomeCount" data-row="0" data-fmt="int">—</b>). Among non-members, <b data-draw="num" data-source="story" data-field="crowdedReason" data-row="0" data-fmt="int">—</b> of the <b data-draw="num" data-source="story" data-field="whyNotBase" data-row="0" data-fmt="int">—</b> who said why they haven't joined cited a building that feels too crowded or short on space, and <b data-draw="num" data-source="story" data-field="joinLikely" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="joinBase" data-row="0" data-fmt="int">—</b> would be very or somewhat likely to join if there were more space.</p>
+        </div>
+      </article>
+
+      <article class="dn-card dn-story" id="story-social-hall">
+        <h3 class="dn-card-title">Social hall and simchas</h3>
+        <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="kiddushGo" data-row="0" data-fmt="pct">—</b> say their family goes to kiddush in the Social Hall on a typical Shabbat. Of those it applies to, <b data-draw="num" data-source="story" data-field="shKiddush" data-row="0" data-fmt="pct">—</b> call crowding there a major problem, #<b data-draw="num" data-source="story" data-field="shKiddushRank" data-row="0" data-fmt="int">—</b> of the <b data-draw="num" data-source="story" data-field="problemCount" data-row="0" data-fmt="int">—</b> building problems, and <b data-draw="num" data-source="story" data-field="shNoise" data-row="0" data-fmt="pct">—</b> say the same about the noise (#<b data-draw="num" data-source="story" data-field="shNoiseRank" data-row="0" data-fmt="int">—</b>). Not enough space to host simchas and events is #<b data-draw="num" data-source="story" data-field="simchaSpaceRank" data-row="0" data-fmt="int">—</b> (<b data-draw="num" data-source="story" data-field="simchaSpace" data-row="0" data-fmt="pct">—</b>).</p>
+        <p class="dn-sentence">In the priority questions, <b data-draw="num" data-source="story" data-field="shTop3" data-row="0" data-fmt="pct">—</b> put the social hall, kiddush and simcha space in their top three, and <b data-draw="num" data-source="story" data-field="shImportant" data-row="0" data-fmt="pct">—</b> rate it essential or very important. Being able to host simchas and events at the shul is the #<b data-draw="num" data-source="story" data-field="simchaOutcomeRank" data-row="0" data-fmt="int">—</b> outcome (<b data-draw="num" data-source="story" data-field="simchaOutcome" data-row="0" data-fmt="pct">—</b>).</p>
+        <p class="dn-sentence">Looking ahead, <b data-draw="num" data-source="story" data-field="bm10" data-row="0" data-fmt="pct">—</b> expect a bar or bat mitzvah in their family in the next ten years, and <b data-draw="num" data-source="story" data-field="rentLikely" data-row="0" data-fmt="pct">—</b> would be very or somewhat likely to use or rent a larger event space for a private simcha or event. Of the <b data-draw="num" data-source="story" data-field="hostElsewhere" data-row="0" data-fmt="int">—</b> who hosted a simcha somewhere other than Darchei Noam in the past three years, <b data-draw="num" data-source="story" data-field="hostSpaceN" data-row="0" data-fmt="int">—</b> said there wasn't enough space for their guests. Among the <b data-draw="num" data-source="story" data-field="guestBm" data-row="0" data-fmt="int">—</b> expecting a bar or bat mitzvah who gave a guest count, <b data-draw="num" data-source="story" data-field="guests150" data-row="0" data-fmt="pct">—</b> would need the social hall to hold 150 or more.</p>
+        <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cSocialHall" data-row="0" data-fmt="int">—</b> about kiddush or the social hall, <b data-draw="num" data-source="story" data-field="cSimchas" data-row="0" data-fmt="int">—</b> about hosting simchas.</p>
+      </article>
+
+      <article class="dn-card dn-story" id="story-sanctuary">
+        <h3 class="dn-card-title">Sanctuary and davening</h3>
+        <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="mainTop3" data-row="0" data-fmt="pct">—</b> put the main sanctuary and davening spaces in their top three, and <b data-draw="num" data-source="story" data-field="mainImportant" data-row="0" data-fmt="pct">—</b> rate them essential or very important. As an outcome, a better davening experience is #<b data-draw="num" data-source="story" data-field="davenOutcomeRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="outcomeCount" data-row="0" data-fmt="int">—</b> (<b data-draw="num" data-source="story" data-field="davenOutcome" data-row="0" data-fmt="pct">—</b>).</p>
+        <p class="dn-sentence">Of those each item applies to, <b data-draw="num" data-source="story" data-field="main9" data-row="0" data-fmt="pct">—</b> call crowding at the 9:00 minyan a major problem (#<b data-draw="num" data-source="story" data-field="main9Rank" data-row="0" data-fmt="int">—</b>), <b data-draw="num" data-source="story" data-field="annex" data-row="0" data-fmt="pct">—</b> say the same of the 8:15 minyan in the Annex (#<b data-draw="num" data-source="story" data-field="annexRank" data-row="0" data-fmt="int">—</b>; it applies to <b data-draw="num" data-source="story" data-field="annexBase" data-row="0" data-fmt="int">—</b> people), and <b data-draw="num" data-source="story" data-field="hallway" data-row="0" data-fmt="pct">—</b> flag noise and foot traffic in the hallway during the 9:00 minyan (#<b data-draw="num" data-source="story" data-field="hallwayRank" data-row="0" data-fmt="int">—</b>).</p>
+        <p class="dn-sentence">The women's section is in <b data-draw="num" data-source="story" data-field="womenTop3" data-row="0" data-fmt="pct">—</b> of top-three lists and rated essential or very important by <b data-draw="num" data-source="story" data-field="womenImportant" data-row="0" data-fmt="pct">—</b>. <b data-draw="num" data-source="story" data-field="womenMajor" data-row="0" data-fmt="pct">—</b> of those it applies to call its seating and sightlines a major problem.</p>
+        <p class="dn-sentence">On size, <b data-draw="num" data-source="story" data-field="seating50" data-row="0" data-fmt="pct">—</b> want 50% or 100% more seats than the roughly 190 today. Among the <b data-draw="num" data-source="story" data-field="whyBase" data-row="0" data-fmt="int">—</b> who gave a reason for davening elsewhere some weeks, <b data-draw="num" data-source="story" data-field="whyFamily" data-row="0" data-fmt="pct">—</b> cite family or friends there, <b data-draw="num" data-source="story" data-field="whyRoom" data-row="0" data-fmt="pct">—</b> not enough room or seats and <b data-draw="num" data-source="story" data-field="whyNoise" data-row="0" data-fmt="pct">—</b> noise during davening.</p>
+        <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cSanctuary" data-row="0" data-fmt="int">—</b> about sanctuary seating, <b data-draw="num" data-source="story" data-field="cAnnex" data-row="0" data-fmt="int">—</b> about the Annex, <b data-draw="num" data-source="story" data-field="cWomen" data-row="0" data-fmt="int">—</b> about the women's section, <b data-draw="num" data-source="story" data-field="cNoise" data-row="0" data-fmt="int">—</b> about noise and decorum during davening, <b data-draw="num" data-source="story" data-field="cBeitMidrash" data-row="0" data-fmt="int">—</b> asking for a beit midrash.</p>
+      </article>
+
+      <article class="dn-card dn-story" id="story-youth">
+        <h3 class="dn-card-title">Youth and young families</h3>
+        <p class="dn-sentence"><b data-draw="num" data-source="story" data-field="kidsShare" data-row="0" data-fmt="pct">—</b> of respondents have children at home: <b data-draw="num" data-source="story" data-field="kidsUnder3" data-row="0" data-fmt="pct">—</b> have a child under 3 and <b data-draw="num" data-source="story" data-field="kidsK3" data-row="0" data-fmt="pct">—</b> a child in kindergarten through 3rd grade. On a typical Shabbat, <b data-draw="num" data-source="story" data-field="groupsShare" data-row="0" data-fmt="pct">—</b> say their family takes part in Groups and <b data-draw="num" data-source="story" data-field="totShare" data-row="0" data-fmt="pct">—</b> in Tot Shabbat.</p>
+        <p class="dn-sentence">Of those it applies to, <b data-draw="num" data-source="story" data-field="youthMajor" data-row="0" data-fmt="pct">—</b> call the lack of youth group space a major problem (#<b data-draw="num" data-source="story" data-field="youthRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="problemCount" data-row="0" data-fmt="int">—</b>). <b data-draw="num" data-source="story" data-field="youthTop3" data-row="0" data-fmt="pct">—</b> put dedicated youth and children's spaces in their top three, <b data-draw="num" data-source="story" data-field="youthImportant" data-row="0" data-fmt="pct">—</b> rate them essential or very important, and better facilities and programming for children and youth is the #<b data-draw="num" data-source="story" data-field="youthOutcomeRank" data-row="0" data-fmt="int">—</b> outcome (<b data-draw="num" data-source="story" data-field="youthOutcome" data-row="0" data-fmt="pct">—</b>).</p>
+        <p class="dn-sentence">Among the <b data-draw="num" data-source="story" data-field="whyBase" data-row="0" data-fmt="int">—</b> who gave a reason for davening elsewhere some weeks, <b data-draw="num" data-source="story" data-field="whyPrograms" data-row="0" data-fmt="pct">—</b> cite programming for their children.</p>
+        <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cYouth" data-row="0" data-fmt="int">—</b> about youth, groups and young families.</p>
+      </article>
+
+      <article class="dn-card dn-story" id="story-access">
+        <h3 class="dn-card-title">Safety, access and getting around</h3>
+        <p class="dn-sentence">Of those each item applies to, <b data-draw="num" data-source="story" data-field="accessMajor" data-row="0" data-fmt="pct">—</b> call getting into and around the building a major problem (#<b data-draw="num" data-source="story" data-field="accessRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="problemCount" data-row="0" data-fmt="int">—</b>), <b data-draw="num" data-source="story" data-field="restroomsMajor" data-row="0" data-fmt="pct">—</b> say the same of restrooms (#<b data-draw="num" data-source="story" data-field="restroomsRank" data-row="0" data-fmt="int">—</b>) and <b data-draw="num" data-source="story" data-field="coatMajor" data-row="0" data-fmt="pct">—</b> of coat room space (#<b data-draw="num" data-source="story" data-field="coatRank" data-row="0" data-fmt="int">—</b>).</p>
+        <p class="dn-sentence">Ease of movement is rated essential or very important by <b data-draw="num" data-source="story" data-field="easeImportant" data-row="0" data-fmt="pct">—</b>, and greater accessibility and ease of use is the #<b data-draw="num" data-source="story" data-field="accessOutcomeRank" data-row="0" data-fmt="int">—</b> outcome (<b data-draw="num" data-source="story" data-field="accessOutcome" data-row="0" data-fmt="pct">—</b>).</p>
+        <p class="dn-sentence">In the written comments, safety, accessibility and flow is the #<b data-draw="num" data-source="story" data-field="cSafetyRank" data-row="0" data-fmt="int">—</b> theme. Those comments raise stairs and split levels, wheelchair access, exits, hallway and coat room congestion, and children outside near the road.</p>
+        <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cSafety" data-row="0" data-fmt="int">—</b> about safety, accessibility and flow, <b data-draw="num" data-source="story" data-field="cComfort" data-row="0" data-fmt="int">—</b> about comfort and amenities.</p>
+      </article>
+
+      <article class="dn-card dn-story dn-card-wide" id="story-fund">
+        <h3 class="dn-card-title">Building fund and communication</h3>
+        <div class="dn-story-body">
+          <p class="dn-sentence">Only members answer the fund questions. <b data-draw="num" data-source="story" data-field="knewAsk" data-row="0" data-fmt="pct">—</b> knew about the $10,000 ask before the survey. <b data-draw="num" data-source="story" data-field="whyAgree" data-row="0" data-fmt="pct">—</b> agree they understand why the shul needs to expand, <b data-draw="num" data-source="story" data-field="trustAgree" data-row="0" data-fmt="pct">—</b> that they trust the leadership to make good decisions about the building, <b data-draw="num" data-source="story" data-field="whatAgree" data-row="0" data-fmt="pct">—</b> that they understand what the fund will pay for and <b data-draw="num" data-source="story" data-field="timelineAgree" data-row="0" data-fmt="pct">—</b> that the project will move forward on a reasonable timeline.</p>
+          <p class="dn-sentence">Asked what would make them more likely to give, <b data-draw="num" data-source="story" data-field="budgetDriver" data-row="0" data-fmt="pct">—</b> of members picked a clear budget and timeline (#<b data-draw="num" data-source="story" data-field="budgetDriverRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="driverCount" data-row="0" data-fmt="int">—</b>) and <b data-draw="num" data-source="story" data-field="plansDriver" data-row="0" data-fmt="pct">—</b> seeing the final plans and renderings (#<b data-draw="num" data-source="story" data-field="plansDriverRank" data-row="0" data-fmt="int">—</b>).</p>
+          <p class="dn-sentence">Among all respondents, <b data-draw="num" data-source="story" data-field="timelineUpdate" data-row="0" data-fmt="pct">—</b> want updates on the construction timeline (#<b data-draw="num" data-source="story" data-field="timelineUpdateRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="typeCount" data-row="0" data-fmt="int">—</b> kinds of update), and <b data-draw="num" data-source="story" data-field="emailChannel" data-row="0" data-fmt="pct">—</b> want dedicated email updates (#<b data-draw="num" data-source="story" data-field="emailChannelRank" data-row="0" data-fmt="int">—</b> of <b data-draw="num" data-source="story" data-field="channelCount" data-row="0" data-fmt="int">—</b> channels).</p>
+        </div>
+        <p class="dn-story-comments">In the comments: <b data-draw="num" data-source="story" data-field="cTransparency" data-row="0" data-fmt="int">—</b> asking for transparency, plans or updates, <b data-draw="num" data-source="story" data-field="cAffordability" data-row="0" data-fmt="int">—</b> about affordability or pressure to give, <b data-draw="num" data-source="story" data-field="cLeadership" data-row="0" data-fmt="int">—</b> about leadership and decision-making, <b data-draw="num" data-source="story" data-field="cFundraising" data-row="0" data-fmt="int">—</b> suggesting other ways to raise money.</p>
+      </article>
+    </div>
+
+    <h3 class="dn-section-title" id="current-building">The current building</h3>
+    <div class="dn-grid">
+      <article class="dn-card dn-card-wide" id="card-problems">
+        <h4 class="dn-card-title">Problems in the current building</h4>
+        <p class="dn-card-note">Share of the people each item applies to ("Doesn't apply to me" answers are left out), sorted by how many call it a major problem.</p>
+        <ul class="dn-legend">
+          <li><span class="dn-key dn-key-1"></span>Major problem</li>
+          <li><span class="dn-key dn-key-2"></span>Minor problem</li>
+        </ul>
+        <div class="dn-bars dash-skeleton" data-draw="problems" data-source="problems"></div>
+      </article>
+      <article class="dn-card" id="card-crowding">
+        <h4 class="dn-card-title">How often crowding changed someone's plans</h4>
+        <p class="dn-card-note">In the past year: skipped, left early or changed plans for davening, kiddush or a program.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Crowding changed plans" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-elsewhere">
+        <h4 class="dn-card-title">Where people daven when not at Darchei Noam</h4>
+        <p class="dn-card-note">Asked of anyone who isn't there every Shabbat. Write-ins are counted as Other.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Davens elsewhere at" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-elsewhere-why">
+        <h4 class="dn-card-title">Why they daven elsewhere</h4>
+        <p class="dn-card-note">More than one answer allowed.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Why elsewhere" data-source="answers"></div>
+      </article>
+    </div>
+
+    <h3 class="dn-section-title" id="priorities">Priorities for the expansion</h3>
+    <div class="dn-grid">
+      <article class="dn-card" id="card-top3">
+        <h4 class="dn-card-title">Top three areas to prioritize</h4>
+        <p class="dn-card-note">Each person picked three.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Top three areas" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-importance">
+        <h4 class="dn-card-title">How important each space is</h4>
+        <ul class="dn-legend">
+          <li><span class="dn-key dn-key-main"></span>Essential</li>
+          <li><span class="dn-key dn-key-main-light"></span>Very important</li>
+        </ul>
+        <div class="dn-bars dash-skeleton" data-draw="importance" data-source="importance"></div>
+      </article>
+      <article class="dn-card" id="card-seating">
+        <h4 class="dn-card-title">Sanctuary seating needed</h4>
+        <p class="dn-card-note">Each option is measured against how many people the Main Sanctuary seats today.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Sanctuary seating" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-outcomes">
+        <h4 class="dn-card-title">Outcomes that matter most</h4>
+        <p class="dn-card-note">Up to three per person.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Outcomes" data-source="answers"></div>
+      </article>
+    </div>
+
+    <h3 class="dn-section-title" id="simchas">Simchas and events</h3>
+    <div class="dn-grid">
+      <article class="dn-card" id="card-guests">
+        <h4 class="dn-card-title">Guests the social hall would need to hold</h4>
+        <p class="dn-card-note">For someone to host a bar or bat mitzvah at Darchei Noam. Everyone was asked, including people not expecting one.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Guests needed" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-rent">
+        <h4 class="dn-card-title">Would use or rent a larger event space</h4>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Would rent larger space" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-bm">
+        <h4 class="dn-card-title">Expect a bar or bat mitzvah in the next ten years</h4>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Bar/bat mitzvah in 10 years" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-hosted-where">
+        <h4 class="dn-card-title">Where people hosted simchas</h4>
+        <p class="dn-card-note">Of those who hosted in the past three years. More than one answer allowed.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Hosted where" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-not-here">
+        <h4 class="dn-card-title">What kept people from hosting at Darchei Noam</h4>
+        <p class="dn-card-note">Of those who hosted somewhere else. Write-ins are counted as Other.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Why not at Darchei Noam" data-source="answers"></div>
+      </article>
+    </div>
+
+    <h3 class="dn-section-title" id="nonmembers">Non-members</h3>
+    <div class="dn-grid">
+      <article class="dn-card" id="card-why-not">
+        <h4 class="dn-card-title">Why they aren't members</h4>
+        <p class="dn-card-note">More than one answer allowed. Write-ins are counted as Other.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Why not a member" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-join">
+        <h4 class="dn-card-title">Would join if there were more space</h4>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Would join with more space" data-source="answers"></div>
+      </article>
+    </div>
+
+    <h3 class="dn-section-title" id="updates">Staying informed</h3>
+    <div class="dn-grid">
+      <article class="dn-card" id="card-channels">
+        <h4 class="dn-card-title">How people want updates</h4>
+        <p class="dn-card-note">More than one answer allowed.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Update channels" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-update-types">
+        <h4 class="dn-card-title">Most useful kinds of updates</h4>
+        <p class="dn-card-note">Up to three per person.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Update types" data-source="answers"></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="dn-page" id="comments" role="tabpanel" aria-labelledby="tab-comments" hidden>
+    <p class="dn-section-note"><b data-draw="num" data-source="commentStats" data-field="total" data-row="0" data-fmt="int">—</b> written comments so far across four open questions. Claude reads each one and tags it with one or more themes, and new comments are tagged at each twice-daily refresh. Theme counts are a guide, not an exact measure.</p>
+
+    <div class="dn-filters">
+      <label class="dn-filter" for="cq-select">Question
+        <select id="cq-select" class="dn-cq">
+          <option value="">All questions</option>
+          <option value="Current building">Anything else about the current building</option>
+          <option value="One improvement">One improvement that would make the biggest difference</option>
+          <option value="Building fund">Questions or concerns about the building fund</option>
+          <option value="Anything else">Anything else to consider</option>
+        </select>
+      </label>
+    </div>
+
+    <article class="dn-card" id="card-themes">
+      <h3 class="dn-card-title">Themes</h3>
+      <p class="dn-card-note">Comments per theme for the question picked above, as a share of all tagged comments. A comment can raise more than one theme. Select a theme to read its comments.</p>
+      <div class="dn-bars dash-skeleton" data-draw="cthemes" data-source="themeCounts"></div>
+    </article>
+  </section>
+
+  <section class="dn-page" id="fund" role="tabpanel" aria-labelledby="tab-fund" hidden>
+    <p class="dn-section-note">Only members see these questions, so every share here is of members who answered.</p>
+    <div class="dn-grid">
+      <article class="dn-card dn-card-wide" id="card-agree">
+        <h4 class="dn-card-title">How much members agree</h4>
+        <ul class="dn-legend">
+          <li><span class="dn-key dn-key-main"></span>Strongly agree</li>
+          <li><span class="dn-key dn-key-main-light"></span>Agree</li>
+          <li><span class="dn-key dn-key-muted"></span>Not sure</li>
+          <li><span class="dn-key dn-key-2"></span>Disagree</li>
+          <li><span class="dn-key dn-key-1"></span>Strongly disagree</li>
+        </ul>
+        <div class="dn-bars dash-skeleton" data-draw="agree" data-source="agree"></div>
+      </article>
+      <article class="dn-card" id="card-familiar">
+        <h4 class="dn-card-title">Familiarity with the building fund</h4>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Fund familiarity" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-aware">
+        <h4 class="dn-card-title">Knew the per-family ask before the survey</h4>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Knew $10,000 ask" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-contributed">
+        <h4 class="dn-card-title">Household has contributed so far</h4>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Household contributed" data-source="answers"></div>
+      </article>
+      <article class="dn-card" id="card-likely">
+        <h4 class="dn-card-title">Likely to give once plans are final</h4>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Likely to give" data-source="answers"></div>
+      </article>
+      <article class="dn-card dn-card-wide" id="card-drivers">
+        <h4 class="dn-card-title">What would make members more likely to give</h4>
+        <p class="dn-card-note">More than one answer allowed. Write-ins are counted as Other.</p>
+        <div class="dn-bars dash-skeleton" data-draw="dist" data-q="Would help giving" data-source="answers"></div>
+      </article>
+    </div>
+  </section>
+</div>
+  <footer class="dn-foot">Congregation Darchei Noam of Fair Lawn · Building Expansion Survey results, updated twice a day until the survey closes.</footer>
+</div>
+<script>
+  window.dash = (() => {
+    const calcs = {};
+    const order = [];
+    const draws = {};
+    const listeners = [];
+    const store = {};
+    let status = 'loading';
+    let started = false;
+    const readParams = () => {
+      const out = {};
+      new URLSearchParams(location.search).forEach((v, k) => { out[k] = v; });
+      return out;
+    };
+    let params = readParams();
+    const writeParams = () => {
+      const q = new URLSearchParams();
+      Object.keys(params).forEach((k) => { if (params[k] != null && params[k] !== '') q.set(k, params[k]); });
+      const s = q.toString();
+      history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash);
+    };
+    const data = (id) => {
+      if (status === 'error') return { status: 'error', data: null };
+      if (status !== 'ok' || !(id in store)) return { status: 'loading', data: null };
+      return { status: 'ok', data: store[id] };
+    };
+    const runDraw = (name) => {
+      const fn = draws[name];
+      if (!fn) return;
+      document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => {
+        try { fn(el); } catch (e) { console.error('draw ' + name, e); }
+      });
+    };
+    const drawAll = () => { if (started) Object.keys(draws).forEach(runDraw); };
+    const notify = () => listeners.forEach((cb) => { try { cb(); } catch (e) { console.error(e); } });
+    const compute = () => {
+      const pending = order.slice();
+      let guard = 0;
+      while (pending.length && guard < 1000) {
+        guard += 1;
+        const id = pending.shift();
+        const c = calcs[id];
+        if (!c.inputs.every((i) => i in store)) { pending.push(id); continue; }
+        store[id] = c.fn(...c.inputs.map((i) => store[i]));
+      }
+    };
+    return {
+      colors: ['#2b6cb0'],
+      calc: (id, spec) => { calcs[id] = spec; order.push(id); },
+      draw: (name, fn) => {
+        if (fn) { draws[name] = fn; if (started) runDraw(name); return; }
+        runDraw(name);
+      },
+      data,
+      params: () => ({ ...params }),
+      setParams: (next) => {
+        Object.keys(next).forEach((k) => { if (next[k] == null) delete params[k]; else params[k] = String(next[k]); });
+        writeParams();
+        drawAll();
+        notify();
+      },
+      setLink: (tab) => { history.replaceState(null, '', location.pathname + location.search + '#' + tab); },
+      onData: (cb) => { listeners.push(cb); if (status === 'ok') cb(); },
+      __start: async (sources) => {
+        started = true;
+        drawAll();
+        try {
+          const meta = await fetch('data/meta.json?t=' + Date.now(), { cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error('meta ' + r.status); return r.json(); });
+          const v = encodeURIComponent(meta.updatedAt || Date.now());
+          const loaded = await Promise.all(Object.keys(sources).map((id) => fetch(sources[id] + '?v=' + v).then((r) => { if (!r.ok) throw new Error(id + ' ' + r.status); return r.json(); }).then((rows) => [id, rows])));
+          loaded.forEach(([id, rows]) => { store[id] = rows; });
+          compute();
+          status = 'ok';
+          const line = document.getElementById('dn-updated');
+          if (line && meta.updatedAt) {
+            const when = new Date(meta.updatedAt).toLocaleString('en-US', { timeZone: 'America/New_York', weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+            line.textContent = 'Updated ' + when + ' ET. New responses are added around 8 AM and 8 PM until the survey closes.';
+          }
+        } catch (e) {
+          console.error(e);
+          status = 'error';
+          const line = document.getElementById('dn-updated');
+          if (line) line.textContent = "The latest responses didn't load. Try refreshing the page.";
+        }
+        drawAll();
+        notify();
+      },
+    };
+  })();
+</script>
+<script>
+  dash.calc('daily', {
+    inputs: ['responses'],
+    title: 'Responses by day',
+    description: 'Counts responses per submission date, with a running total; days with none count as zero.',
+    fn: (responses) => {
+      const counts = new Map();
+      for (const r of responses) {
+        const day = String(r['Submitted'] || '').slice(0, 10);
+        if (day) counts.set(day, (counts.get(day) || 0) + 1);
+      }
+      const days = [...counts.keys()].sort();
+      if (days.length === 0) return [];
+      const out = [];
+      let cumulative = 0;
+      for (let t = Date.parse(days[0] + 'T00:00:00Z'); t <= Date.parse(days[days.length - 1] + 'T00:00:00Z'); t += 86400000) {
+        const day = new Date(t).toISOString().slice(0, 10);
+        const n = counts.get(day) || 0;
+        cumulative += n;
+        out.push({ day, n, cumulative });
+      }
+      return out;
+    },
+  });
+
+  dash.calc('who', {
+    inputs: ['responses'],
+    title: 'Who has responded',
+    description: 'Responses per group for eight background questions, as a count and a share of all responses; groups under 10 responses are flagged, except Prefer not to say.',
+    fn: (responses) => {
+      const THRESHOLD = 10;
+      const DIMS = [
+        ['Membership', [['I am a member of Darchei Noam (individually or as part of a family membership)', 'Member'], ['I am not a member, but I regularly daven or take part at Darchei Noam', 'Non-member, regular'], ['I am not a member and attend occasionally', 'Non-member, occasional'], ['I am a former member', 'Former member']]],
+        ['Gender', [['Male', 'Male'], ['Female', 'Female'], ['Prefer not to say', 'Prefer not to say']]],
+        ['Age', [['Under 30', 'Under 30'], ['30–39', '30–39'], ['40–49', '40–49'], ['50–59', '50–59'], ['60–69', '60–69'], ['70 or older', '70 or older'], ['Prefer not to say', 'Prefer not to say']]],
+        ['Children at home', [['No children living at home', 'No children at home'], ['Under 3', 'Under 3'], ['Age 3 through pre-K', 'Age 3 through pre-K'], ['Kindergarten through 3rd grade', 'K through 3rd grade'], ['4th through 8th grade', '4th through 8th grade'], ['High school', 'High school'], ['Over 18', 'Over 18'], ['Prefer not to say', 'Prefer not to say']], true],
+        ['Usual minyan', [['7:15 in Main Sanctuary', '7:15 Main Sanctuary'], ['8:15 in Annex', '8:15 Annex'], ['9:00 in Main Sanctuary', '9:00 Main Sanctuary'], ['I usually come for Groups/Tot Shabbat only', 'Groups or Tot Shabbat only'], ['I usually come for socialization purposes only', 'Socializing only'], ['I usually daven at another shul on Shabbat morning', 'Another shul'], ['I rarely go to a shul on Shabbat', 'Rarely at shul on Shabbat']]],
+        ['Shabbat mornings a month', [['Every Shabbat', 'Every Shabbat'], ['3', '3'], ['2', '2'], ['1', '1'], ['Fewer than one a month', 'Fewer than one']]],
+        ['Years in community', [['Less than 1 year', 'Less than 1 year'], ['1–3 years', '1–3 years'], ['4–7 years', '4–7 years'], ['8–15 years', '8–15 years'], ['More than 15 years', 'More than 15 years']]],
+        ['Walk', [['Under 10 minutes', 'Under 10 minutes'], ['10–20 minutes', '10–20 minutes'], ['20–30 minutes', '20–30 minutes'], ['More than 30 minutes', 'More than 30 minutes']]],
+      ];
+      const total = responses.length;
+      const out = [];
+      for (const [dimension, options, multi] of DIMS) {
+        for (const [value, group] of options) {
+          const n = responses.filter((r) => (multi ? String(r[dimension] || '').split('\n').includes(value) : r[dimension] === value)).length;
+          out.push({ dimension, group, n, share: total ? n / total : 0, thin: n < THRESHOLD && group !== 'Prefer not to say', threshold: THRESHOLD });
+        }
+      }
+      return out;
+    },
+  });
+
+  dash.calc('totals', {
+    inputs: ['responses', 'who'],
+    title: 'Response totals',
+    description: 'All responses, members and everyone else, the member share, respondents with children at home, a floor on children at home (one per age group each respondent picked), and the outreach line used for Few responses tags.',
+    fn: (responses, who) => {
+      const total = responses.length;
+      const members = responses.filter((r) => r['Membership'] === 'I am a member of Darchei Noam (individually or as part of a family membership)').length;
+      const ages = responses.map((r) => String(r['Children at home'] || '').split('\n').filter((v) => v && v !== 'No children living at home' && v !== 'Prefer not to say'));
+      const kidsAny = ages.filter((a) => a.length > 0).length;
+      return [{
+        total,
+        members,
+        nonMembers: total - members,
+        membersShare: total ? members / total : 0,
+        kidsAny,
+        kidsShare: total ? kidsAny / total : 0,
+        kidsCount: ages.reduce((s, a) => s + a.length, 0),
+        threshold: who.length ? who[0].threshold : null,
+      }];
+    },
+  });
+
+  dash.calc('answers', {
+    inputs: ['responses'],
+    title: 'Answers by question',
+    description: 'For each multiple-choice question, how many picked each answer and their share of everyone who answered it; pick-several questions are sorted by count.',
+    fn: (responses) => {
+      const Q = [
+        ['Why not a member', ['I belong to another shul', "I'm new to the community", 'The cost of membership', 'The building feels too crowded or short on space', "The programming doesn't fit my needs right now", "I haven't been asked or don't know how to join", 'Other'], true],
+        ['Would join with more space', ['Very likely', 'Somewhat likely', 'Not very likely', 'Not at all likely']],
+        ['Davens elsewhere at', ['Shomrei Torah', 'A house minyan', 'Another shul in Fair Lawn', "I'm usually away for Shabbat", 'I usually daven at home', 'Other'], false, true],
+        ['Why elsewhere', ['Not enough room or seats', 'Noise during davening', "The minyan times don't work for me", 'The length of davening', 'Family or friends daven there', 'Programming for my children', 'Walking distance', "Doesn't apply; I'm usually away or daven at home", 'Other'], true],
+        ['Crowding changed plans', ['Often', 'Sometimes', 'Rarely', 'Never']],
+        ['Hosted where', ['At Darchei Noam', 'At home', 'At another shul', 'At a hall, restaurant or other venue'], true],
+        ['Why not at Darchei Noam', ['Not enough space for our guests', 'Kitchen or catering limits', "The date wasn't available", 'Cost', "The space wasn't right for this kind of event", 'Other'], true],
+        ['Bar/bat mitzvah in 10 years', ['Yes', 'Maybe', 'No']],
+        ['Would rent larger space', ['Very likely', 'Somewhat likely', 'Not very likely', 'Not at all likely']],
+        ['Guests needed', ['Fewer than 100', '100–149', '150–199', '200–249', '250 or more', 'Not sure']],
+        ['Top three areas', ['Main sanctuary and davening spaces', "Women's section layout and sightlines", 'Social hall, kiddush and simcha space', 'Kitchen and food service', 'Multipurpose rooms', "Dedicated youth and children's spaces", 'Adult learning and small gathering spaces', 'Lobby and entrance', 'Restrooms', 'Storage, coat room and stroller parking', 'Outdoor space', 'Ease of movement'], true],
+        ['Sanctuary seating', ['25% more (up to 250)', '50% more (up to 300)', '100% more (up to 400)', 'Not sure']],
+        ['Outcomes', ['A better davening experience.', 'More comfortable and welcoming Shabbat and Yom Tov gatherings.', 'Better facilities and programming for children and youth.', 'More opportunities for Torah learning and smaller gatherings.', 'Stronger social connection and community life.', 'Better support for weekday minyanim and activities.', 'Greater accessibility and ease of use.', 'The ability to host simchas and events at the shul.', 'Room for more members and families to join.', 'Other'], true],
+        ['Fund familiarity', ['Very familiar', 'Somewhat familiar', "I've heard of it but don't know the details", 'Not familiar']],
+        ['Knew $10,000 ask', ['Yes', 'No']],
+        ['Household contributed', ['Yes', 'Not yet, but we plan to', 'No', 'Prefer not to say']],
+        ['Likely to give', ['Very likely', 'Somewhat likely', 'Not sure yet', 'Unlikely', 'Prefer not to say']],
+        ['Would help giving', ['Seeing the final plans and renderings', 'A clear budget and timeline', 'Knowing how much has been raised so far', 'Regular progress updates', 'Multi-year pledges or flexible payment options', 'Dedication or naming opportunities', 'A personal conversation with a committee member', 'Do not intend to make additional contributions', 'Other'], true],
+        ['Update channels', ['Weekly bulletin', 'WhatsApp', 'Dedicated email updates', 'In-shul signage', 'Town halls', 'Other'], true],
+        ['Update types', ['Renderings and floor plans', 'The construction timeline', 'Fundraising progress', 'Budget and costs', 'Chances to give input, such as town halls', 'Building walkthroughs or site visits', 'Q&A sessions with the committee', 'Other'], true],
+      ];
+      const out = [];
+      for (const [question, options, multi, sortByCount] of Q) {
+        const answered = responses.map((r) => String(r[question] || '')).filter((v) => v !== '');
+        const base = answered.length;
+        let rows = options.map((option) => {
+          const n = answered.filter((v) => (multi ? v.split('\n').includes(option) : v === option)).length;
+          return { question, option, n, share: base ? n / base : 0, base };
+        });
+        if (multi || sortByCount) rows = rows.sort((a, b) => b.n - a.n);
+        out.push(...rows);
+      }
+      return out;
+    },
+  });
+
+  dash.calc('problems', {
+    inputs: ['responses'],
+    title: 'Problems in the current building',
+    description: 'For each item in the problems grid, the share of people it applies to who rated it a major or a minor problem, sorted by major; "Doesn\'t apply to me" answers are left out of the base and counted separately.',
+    fn: (responses) => {
+      const cols = responses.length ? Object.keys(responses[0]).filter((c) => c.startsWith('Problem: ')) : [];
+      return cols.map((c) => {
+        const vals = responses.map((r) => r[c]).filter((v) => v);
+        const applies = vals.filter((v) => !/apply to me/i.test(v));
+        const base = applies.length;
+        const major = applies.filter((v) => v === 'Major problem').length;
+        const minor = applies.filter((v) => v === 'Minor problem').length;
+        return { item: c.slice('Problem: '.length), major, minor, base, notApply: vals.length - base, majorShare: base ? major / base : 0, minorShare: base ? minor / base : 0 };
+      }).sort((a, b) => b.majorShare - a.majorShare);
+    },
+  });
+
+  dash.calc('importance', {
+    inputs: ['responses'],
+    title: 'Importance of each space',
+    description: 'For each space in the importance grid, the share rating it Essential or Very important, sorted by the two together.',
+    fn: (responses) => {
+      const cols = responses.length ? Object.keys(responses[0]).filter((c) => c.startsWith('Importance: ')) : [];
+      return cols.map((c) => {
+        const vals = responses.map((r) => r[c]).filter((v) => v);
+        const base = vals.length;
+        const essential = vals.filter((v) => v === 'Essential').length;
+        const very = vals.filter((v) => v === 'Very important').length;
+        return { item: c.slice('Importance: '.length), essential, very, base, essentialShare: base ? essential / base : 0, veryShare: base ? very / base : 0, highShare: base ? (essential + very) / base : 0 };
+      }).sort((a, b) => b.highShare - a.highShare);
+    },
+  });
+
+  dash.calc('agree', {
+    inputs: ['responses'],
+    title: 'Agreement statements',
+    description: 'For each building fund statement, the share of members giving each answer.',
+    fn: (responses) => {
+      const cols = responses.length ? Object.keys(responses[0]).filter((c) => c.startsWith('Agree: ')) : [];
+      return cols.map((c) => {
+        const vals = responses.map((r) => r[c]).filter((v) => v);
+        const base = vals.length;
+        const share = (label) => (base ? vals.filter((v) => v === label).length / base : 0);
+        const stronglyAgree = share('Strongly agree');
+        const agreeOnly = share('Agree');
+        return { item: c.slice('Agree: '.length), base, stronglyAgree, agree: agreeOnly, notSure: share('Not sure'), disagree: share('Disagree'), stronglyDisagree: share('Strongly disagree'), agreeShare: stronglyAgree + agreeOnly };
+      });
+    },
+  });
+
+  dash.calc('comments', {
+    inputs: ['responses', 'codes', 'themes'],
+    title: 'Written comments',
+    description: 'Every written comment from the four open questions, with the themes Claude tagged it with; newer comments show as not yet themed, and blank answers like "n/a" are left out.',
+    fn: (responses, codes, themes) => {
+      const QUESTIONS = [
+        ['Comment: current building', 'Current building'],
+        ['Comment: one improvement', 'One improvement'],
+        ['Comment: building fund', 'Building fund'],
+        ['Comment: anything else', 'Anything else'],
+      ];
+      const BLANK = ['', 'n/a', 'na', 'no', 'none', 'nope', '-'];
+      const labelOf = new Map(themes.map((t) => [t.theme, t.label]));
+      const coded = new Map(codes.map((c) => [c.question + '\u0001' + String(c.text).trim(), c]));
+      const out = [];
+      for (const [column, question] of QUESTIONS) {
+        for (const r of responses) {
+          const text = String(r[column] || '').trim();
+          if (BLANK.includes(text.toLowerCase())) continue;
+          const code = coded.get(column + '\u0001' + text);
+          if (code && !code.themes) continue;
+          const keys = code ? String(code.themes).split(' ').filter(Boolean) : [];
+          out.push({
+            id: out.length + 1,
+            question,
+            comment: text,
+            themes: code ? keys.map((k) => labelOf.get(k) || k).join(', ') : 'Not yet themed',
+            themeKeys: keys.join(' '),
+            coded: Boolean(code),
+          });
+        }
+      }
+      return out;
+    },
+  });
+
+  dash.calc('commentStats', {
+    inputs: ['comments'],
+    title: 'Comment totals',
+    description: 'How many written comments there are, and how many are themed.',
+    fn: (comments) => [{
+      total: comments.length,
+      themed: comments.filter((c) => c.coded).length,
+      notYet: comments.filter((c) => !c.coded).length,
+    }],
+  });
+
+  dash.calc('themeCounts', {
+    inputs: ['comments', 'themes', 'codes'],
+    title: 'Comments per theme',
+    description: 'For each theme, how many comments carry it, overall and for each question, as a count and a share of themed comments, with one example quote.',
+    fn: (comments, themes, codes) => {
+      const QUESTIONS = ['All questions', 'Current building', 'One improvement', 'Building fund', 'Anything else'];
+      const out = [];
+      for (const question of QUESTIONS) {
+        const pool = comments.filter((c) => c.coded && (question === 'All questions' || c.question === question));
+        const rows = themes.map((t) => {
+          const n = pool.filter((c) => c.themeKeys.split(' ').includes(t.theme)).length;
+          const quote = (codes.find((c) => c.quoteTheme === t.theme) || {}).quote || '';
+          return { question, theme: t.theme, label: t.label, description: t.description, n, share: pool.length ? n / pool.length : 0, base: pool.length, quote };
+        });
+        out.push(...rows.sort((a, b) => b.n - a.n));
+      }
+      return out;
+    },
+  });
+
+  dash.calc('story', {
+    inputs: ['responses', 'problems', 'importance', 'answers', 'agree', 'themeCounts'],
+    title: 'Story figures',
+    description: 'The figures quoted in the stories, each from the question named in the text. Problem ratings leave out "Doesn\'t apply to me"; ranks count only items or options with a strictly higher share; reasons for davening elsewhere are shares of people who gave a real reason; guest counts are of people expecting a bar or bat mitzvah who gave a number; comment counts and theme ranks use all four open questions.',
+    fn: (responses, problems, importance, answers, agree, themeCounts) => {
+      const prob = (item) => problems.find((p) => p.item === item) || null;
+      const major = (item) => (prob(item) ? prob(item).majorShare : null);
+      const rankP = (item) => { const p = prob(item); return p ? 1 + problems.filter((q) => q.majorShare > p.majorShare).length : null; };
+      const imp = (item) => (importance.find((p) => p.item === item) || {}).highShare ?? null;
+      const opts = (q) => answers.filter((a) => a.question === q && a.option !== 'Other');
+      const ans = (q, option) => answers.find((a) => a.question === q && a.option === option) || null;
+      const share = (q, option) => (ans(q, option) ? ans(q, option).share : null);
+      const count = (q, option) => (ans(q, option) ? ans(q, option).n : 0);
+      const rankA = (q, option) => { const a = ans(q, option); return a ? 1 + opts(q).filter((o) => o.n > a.n).length : null; };
+      const sum = (q, options) => options.reduce((s, o) => s + (share(q, o) || 0), 0);
+      const agreed = (item) => (agree.find((a) => a.item === item) || {}).agreeShare ?? null;
+      const themes = themeCounts.filter((t) => t.question === 'All questions');
+      const said = (theme) => (themes.find((t) => t.theme === theme) || {}).n ?? 0;
+      const themeRank = (theme) => 1 + themes.filter((t) => t.theme !== 'other' && t.n > said(theme)).length;
+      const picks = (r, col) => String(r[col] || '').split('\n').filter(Boolean);
+      const pickShare = (col, option) => {
+        const answered = responses.filter((r) => picks(r, col).length > 0);
+        return answered.length ? answered.filter((r) => picks(r, col).includes(option)).length / answered.length : null;
+      };
+      const total = responses.length;
+      const kids = responses.map((r) => picks(r, 'Children at home'));
+      const anyKids = kids.filter((k) => k.some((v) => v !== 'No children living at home' && v !== 'Prefer not to say')).length;
+      const DOESNT = "Doesn't apply; I'm usually away or daven at home";
+      const gaveReason = responses.filter((r) => picks(r, 'Why elsewhere').some((v) => v !== DOESNT));
+      const whyShare = (option) => (gaveReason.length ? gaveReason.filter((r) => picks(r, 'Why elsewhere').includes(option)).length / gaveReason.length : null);
+      const BIG = ['150–199', '200–249', '250 or more'];
+      const guestBm = responses.filter((r) => r['Bar/bat mitzvah in 10 years'] === 'Yes' && r['Guests needed'] && r['Guests needed'] !== 'Not sure');
+      const whyNot = responses.filter((r) => picks(r, 'Why not a member').length > 0);
+      const join = responses.filter((r) => r['Would join with more space']);
+      return [{
+        problemCount: problems.length,
+        outcomeCount: opts('Outcomes').length,
+        crowdChanged: sum('Crowding changed plans', ['Often', 'Sometimes']),
+        crowdOften: share('Crowding changed plans', 'Often'),
+        roomOutcome: share('Outcomes', 'Room for more members and families to join.'),
+        roomOutcomeRank: rankA('Outcomes', 'Room for more members and families to join.'),
+        whyNotBase: whyNot.length,
+        crowdedReason: whyNot.filter((r) => picks(r, 'Why not a member').includes('The building feels too crowded or short on space')).length,
+        joinBase: join.length,
+        joinLikely: join.filter((r) => ['Very likely', 'Somewhat likely'].includes(r['Would join with more space'])).length,
+
+        kiddushGo: pickShare('Shabbat activities', 'Kiddush in the Social Hall'),
+        shKiddush: major('Crowding in the Social Hall during kiddush'),
+        shKiddushRank: rankP('Crowding in the Social Hall during kiddush'),
+        shNoise: major('Noise in the Social Hall during kiddush'),
+        shNoiseRank: rankP('Noise in the Social Hall during kiddush'),
+        simchaSpace: major('Not enough space to host simchas and events'),
+        simchaSpaceRank: rankP('Not enough space to host simchas and events'),
+        shTop3: share('Top three areas', 'Social hall, kiddush and simcha space'),
+        shImportant: imp('Social hall, kiddush and simcha space'),
+        simchaOutcome: share('Outcomes', 'The ability to host simchas and events at the shul.'),
+        simchaOutcomeRank: rankA('Outcomes', 'The ability to host simchas and events at the shul.'),
+        bm10: share('Bar/bat mitzvah in 10 years', 'Yes'),
+        rentLikely: sum('Would rent larger space', ['Very likely', 'Somewhat likely']),
+        hostElsewhere: ans('Why not at Darchei Noam', 'Not enough space for our guests') ? ans('Why not at Darchei Noam', 'Not enough space for our guests').base : 0,
+        hostSpaceN: count('Why not at Darchei Noam', 'Not enough space for our guests'),
+        guestBm: guestBm.length,
+        guests150: guestBm.length ? guestBm.filter((r) => BIG.includes(r['Guests needed'])).length / guestBm.length : null,
+
+        mainTop3: share('Top three areas', 'Main sanctuary and davening spaces'),
+        mainImportant: imp('Main sanctuary and davening spaces'),
+        davenOutcome: share('Outcomes', 'A better davening experience.'),
+        davenOutcomeRank: rankA('Outcomes', 'A better davening experience.'),
+        main9: major('Crowding in the Main Sanctuary during the 9:00 minyan'),
+        main9Rank: rankP('Crowding in the Main Sanctuary during the 9:00 minyan'),
+        annex: major('Crowding in the Annex during the 8:15 minyan'),
+        annexRank: rankP('Crowding in the Annex during the 8:15 minyan'),
+        annexBase: prob('Crowding in the Annex during the 8:15 minyan') ? prob('Crowding in the Annex during the 8:15 minyan').base : 0,
+        hallway: major('Noise and foot traffic in the hallway outside the Main Sanctuary during the 9:00 minyan'),
+        hallwayRank: rankP('Noise and foot traffic in the hallway outside the Main Sanctuary during the 9:00 minyan'),
+        womenTop3: share('Top three areas', "Women's section layout and sightlines"),
+        womenImportant: imp("Women's section layout and sightlines"),
+        womenMajor: major("Seating and sightlines in the women's section"),
+        seating50: sum('Sanctuary seating', ['50% more (up to 300)', '100% more (up to 400)']),
+        whyBase: gaveReason.length,
+        whyFamily: whyShare('Family or friends daven there'),
+        whyRoom: whyShare('Not enough room or seats'),
+        whyNoise: whyShare('Noise during davening'),
+        whyPrograms: whyShare('Programming for my children'),
+
+        kidsShare: total ? anyKids / total : null,
+        kidsUnder3: total ? kids.filter((k) => k.includes('Under 3')).length / total : null,
+        kidsK3: total ? kids.filter((k) => k.includes('Kindergarten through 3rd grade')).length / total : null,
+        groupsShare: pickShare('Shabbat activities', 'Groups (age 3 through 3rd grade)'),
+        totShare: pickShare('Shabbat activities', 'Tot Shabbat'),
+        youthMajor: major('Not enough space for youth groups'),
+        youthRank: rankP('Not enough space for youth groups'),
+        youthTop3: share('Top three areas', "Dedicated youth and children's spaces"),
+        youthImportant: imp("Dedicated youth and children's spaces"),
+        youthOutcome: share('Outcomes', 'Better facilities and programming for children and youth.'),
+        youthOutcomeRank: rankA('Outcomes', 'Better facilities and programming for children and youth.'),
+
+        accessMajor: major('Getting into and around the building'),
+        accessRank: rankP('Getting into and around the building'),
+        restroomsMajor: major('Not enough restrooms'),
+        restroomsRank: rankP('Not enough restrooms'),
+        coatMajor: major('Not enough coat room space, especially in winter'),
+        coatRank: rankP('Not enough coat room space, especially in winter'),
+        easeImportant: imp('Ease of movement'),
+        accessOutcome: share('Outcomes', 'Greater accessibility and ease of use.'),
+        accessOutcomeRank: rankA('Outcomes', 'Greater accessibility and ease of use.'),
+
+        knewAsk: share('Knew $10,000 ask', 'Yes'),
+        whyAgree: agreed('I understand why the shul needs to expand.'),
+        whatAgree: agreed('I understand what the building fund will pay for.'),
+        trustAgree: agreed('I trust the shul leadership to make good decisions about the building.'),
+        timelineAgree: agreed('I am confident the project will move forward on a reasonable timeline.'),
+        budgetDriver: share('Would help giving', 'A clear budget and timeline'),
+        budgetDriverRank: rankA('Would help giving', 'A clear budget and timeline'),
+        plansDriver: share('Would help giving', 'Seeing the final plans and renderings'),
+        plansDriverRank: rankA('Would help giving', 'Seeing the final plans and renderings'),
+        driverCount: opts('Would help giving').length,
+        timelineUpdate: share('Update types', 'The construction timeline'),
+        timelineUpdateRank: rankA('Update types', 'The construction timeline'),
+        typeCount: opts('Update types').length,
+        emailChannel: share('Update channels', 'Dedicated email updates'),
+        emailChannelRank: rankA('Update channels', 'Dedicated email updates'),
+        channelCount: opts('Update channels').length,
+
+        cSocialHall: said('social_hall'),
+        cSimchas: said('simchas'),
+        cSanctuary: said('sanctuary'),
+        cAnnex: said('annex'),
+        cWomen: said('women'),
+        cNoise: said('noise'),
+        cBeitMidrash: said('beit_midrash'),
+        cYouth: said('youth'),
+        cSafety: said('safety_access'),
+        cSafetyRank: themeRank('safety_access'),
+        cComfort: said('comfort'),
+        cTransparency: said('transparency'),
+        cAffordability: said('affordability'),
+        cLeadership: said('leadership'),
+        cFundraising: said('fundraising'),
+      }];
+    },
+  });
+</script>
+<script>
+  window.dnKit = (() => {
+    const fmtInt = d3.format(',');
+    const fmtPct = d3.format('.0%');
+    const format = (kind, v) => (kind === 'pct' ? fmtPct(v) : kind === 'int' ? fmtInt(v) : String(v));
+    const failed = () => {
+      const line = document.createElement('span');
+      line.className = 'dn-failed';
+      const dot = document.createElement('i');
+      dot.className = 'dn-failed-dot';
+      line.append(dot, document.createTextNode('Failed to load'));
+      return line;
+    };
+    const ready = (el, id) => {
+      const d = dash.data(id);
+      if (d.status === 'ok') { el.classList.remove('dash-skeleton'); return d.data || []; }
+      if (d.status === 'error') { el.classList.remove('dash-skeleton'); el.replaceChildren(failed()); return null; }
+      el.classList.add('dash-skeleton');
+      el.replaceChildren();
+      return null;
+    };
+    const tip = (host, event, lines) => {
+      let t = host.querySelector(':scope > .dn-tip');
+      if (!t) { t = document.createElement('div'); t.className = 'dn-tip'; host.append(t); }
+      t.replaceChildren(...lines.map((s, i) => { const d = document.createElement('div'); d.textContent = s; if (i === 0) d.className = 'dn-tip-head'; return d; }));
+      t.hidden = false;
+      const box = host.getBoundingClientRect();
+      const x = Math.max(4, Math.min(event.clientX - box.left + 12, box.width - t.offsetWidth - 4));
+      const y = Math.max(4, Math.min(event.clientY - box.top + 12, box.height - t.offsetHeight - 4));
+      t.style.left = x + 'px';
+      t.style.top = y + 'px';
+    };
+    const untip = (host) => { const t = host.querySelector(':scope > .dn-tip'); if (t) t.hidden = true; };
+    const color = () => (dash.colors && dash.colors[0]) || 'currentColor';
+    const barRow = (host, label, valueText, segments, tipLines, chip) => {
+      const row = document.createElement('div');
+      row.className = 'dn-bar-row';
+      const lab = document.createElement('span');
+      lab.className = 'dn-bar-label';
+      lab.append(document.createTextNode(label));
+      if (chip) { const c = document.createElement('span'); c.className = 'dn-chip'; c.textContent = chip; lab.append(c); }
+      const val = document.createElement('span');
+      val.className = 'dn-bar-value';
+      val.textContent = valueText;
+      const track = document.createElement('div');
+      track.className = 'dn-track';
+      for (const s of segments) {
+        const seg = document.createElement('div');
+        seg.className = 'dn-seg';
+        seg.style.width = Math.max(0, Math.min(1, s.share)) * 100 + '%';
+        seg.style.background = s.color;
+        if (s.opacity != null) seg.style.opacity = String(s.opacity);
+        track.append(seg);
+      }
+      row.append(lab, val, track);
+      row.addEventListener('mousemove', (e) => tip(host, e, tipLines));
+      row.addEventListener('mouseleave', () => untip(host));
+      return row;
+    };
+    const base = (text) => { const b = document.createElement('div'); b.className = 'dn-base'; b.textContent = text; return b; };
+    return { format, fmtInt, fmtPct, ready, tip, untip, barRow, base, color };
+  })();
+
+  document.querySelectorAll('.dn').forEach((root) => root.style.setProperty('--dn-c0', (dash.colors && dash.colors[0]) || ''));
+
+  dash.draw('num', (el) => {
+    const d = dash.data(el.dataset.source);
+    if (d.status !== 'ok') {
+      el.textContent = '—';
+      if (d.status === 'error') el.classList.remove('dash-skeleton');
+      return;
+    }
+    const row = (d.data || [])[Number(el.dataset.row || 0)];
+    const v = row ? row[el.dataset.field] : null;
+    el.textContent = v == null ? '—' : dnKit.format(el.dataset.fmt, v);
+    el.classList.remove('dash-skeleton');
+  });
+
+  dash.draw('who', (el) => {
+    const rows = dnKit.ready(el, 'who');
+    if (!rows) return;
+    const mine = rows.filter((r) => r.dimension === el.dataset.dim);
+    const c = dnKit.color();
+    el.replaceChildren(...mine.map((r) => dnKit.barRow(
+      el,
+      r.group,
+      dnKit.fmtPct(r.share) + ' · ' + dnKit.fmtInt(r.n),
+      [{ share: r.share, color: c }],
+      [r.group, dnKit.fmtInt(r.n) + ' responses', dnKit.fmtPct(r.share) + ' of all responses'],
+      r.thin ? 'Few responses' : null,
+    )));
+  });
+
+  dash.draw('dist', (el) => {
+    const rows = dnKit.ready(el, 'answers');
+    if (!rows) return;
+    const mine = rows.filter((r) => r.question === el.dataset.q);
+    const c = dnKit.color();
+    const n = mine.length ? mine[0].base : 0;
+    if (n === 0) { el.replaceChildren(dnKit.base('No answers yet.')); return; }
+    el.replaceChildren(
+      ...mine.map((r) => dnKit.barRow(
+        el,
+        r.option,
+        dnKit.fmtPct(r.share) + ' · ' + dnKit.fmtInt(r.n),
+        [{ share: r.share, color: c }],
+        [r.option, dnKit.fmtInt(r.n) + ' of ' + dnKit.fmtInt(r.base) + ' who answered', dnKit.fmtPct(r.share)],
+      )),
+      dnKit.base('Answered by ' + dnKit.fmtInt(n)),
+    );
+  });
+
+  dash.draw('problems', (el) => {
+    const rows = dnKit.ready(el, 'problems');
+    if (!rows) return;
+    const crit = getComputedStyle(el).getPropertyValue('--cds-chart-status-critical').trim() || 'currentColor';
+    el.replaceChildren(...rows.map((r) => dnKit.barRow(
+      el,
+      r.item,
+      dnKit.fmtPct(r.majorShare) + ' major',
+      [{ share: r.majorShare, color: crit }, { share: r.minorShare, color: crit, opacity: 0.45 }],
+      [r.item, 'Major problem: ' + dnKit.fmtPct(r.majorShare) + ' (' + dnKit.fmtInt(r.major) + ')', 'Minor problem: ' + dnKit.fmtPct(r.minorShare) + ' (' + dnKit.fmtInt(r.minor) + ')', 'Applies to ' + dnKit.fmtInt(r.base) + (r.notApply ? '; ' + dnKit.fmtInt(r.notApply) + " said it doesn't apply" : '')],
+    )));
+  });
+
+  dash.draw('importance', (el) => {
+    const rows = dnKit.ready(el, 'importance');
+    if (!rows) return;
+    const c = dnKit.color();
+    el.replaceChildren(...rows.map((r) => dnKit.barRow(
+      el,
+      r.item,
+      dnKit.fmtPct(r.highShare),
+      [{ share: r.essentialShare, color: c }, { share: r.veryShare, color: c, opacity: 0.45 }],
+      [r.item, 'Essential: ' + dnKit.fmtPct(r.essentialShare), 'Very important: ' + dnKit.fmtPct(r.veryShare), 'Rated by ' + dnKit.fmtInt(r.base)],
+    )));
+  });
+
+  dash.draw('agree', (el) => {
+    const rows = dnKit.ready(el, 'agree');
+    if (!rows) return;
+    const c = dnKit.color();
+    const css = getComputedStyle(el);
+    const crit = css.getPropertyValue('--cds-chart-status-critical').trim() || 'currentColor';
+    const muted = css.getPropertyValue('--cds-chart-muted').trim() || 'currentColor';
+    el.replaceChildren(...rows.map((r) => dnKit.barRow(
+      el,
+      r.item,
+      dnKit.fmtPct(r.agreeShare) + ' agree',
+      [
+        { share: r.stronglyAgree, color: c },
+        { share: r.agree, color: c, opacity: 0.45 },
+        { share: r.notSure, color: muted },
+        { share: r.disagree, color: crit, opacity: 0.45 },
+        { share: r.stronglyDisagree, color: crit },
+      ],
+      [r.item, 'Strongly agree: ' + dnKit.fmtPct(r.stronglyAgree), 'Agree: ' + dnKit.fmtPct(r.agree), 'Not sure: ' + dnKit.fmtPct(r.notSure), 'Disagree: ' + dnKit.fmtPct(r.disagree), 'Strongly disagree: ' + dnKit.fmtPct(r.stronglyDisagree), 'Answered by ' + dnKit.fmtInt(r.base)],
+    )));
+  });
+
+  dash.draw('daily', (el) => {
+    const rows = dnKit.ready(el, 'daily');
+    if (!rows) return;
+    if (rows.length === 0) { el.replaceChildren(dnKit.base('No responses yet.')); return; }
+    const W = Math.max(280, el.clientWidth || 600);
+    const H = 220;
+    const svg = d3.create('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Responses by day');
+    el.replaceChildren(svg.node());
+    const yMax = d3.max(rows, (r) => r.n) || 1;
+    const y = d3.scaleLinear([0, yMax], [H - 28, 18]).nice();
+    const ticks = y.ticks(4);
+    const probe = svg.append('text').attr('font-size', 11).attr('opacity', 0).text(dnKit.fmtInt(d3.max(ticks)));
+    const tickW = probe.node().getComputedTextLength() || 20;
+    probe.remove();
+    const left = Math.ceil(tickW) + 10;
+    const x = d3.scaleBand(rows.map((r) => r.day), [left, W - 8]).padding(0.25);
+    const fmtDay = d3.utcFormat('%b %-d');
+    const grid = svg.append('g');
+    for (const t of ticks) {
+      grid.append('line').attr('x1', left).attr('x2', W - 8).attr('y1', y(t)).attr('y2', y(t)).attr('stroke', 'var(--cds-chart-grid)').attr('stroke-width', 1);
+      grid.append('text').attr('x', left - 6).attr('y', y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(dnKit.fmtInt(t));
+    }
+    const c = dnKit.color();
+    const bw = Math.min(32, x.bandwidth());
+    const g = svg.append('g');
+    rows.forEach((r) => {
+      const cx = x(r.day) + x.bandwidth() / 2;
+      g.append('rect').attr('x', cx - bw / 2).attr('width', bw).attr('y', y(r.n)).attr('height', Math.max(0, y(0) - y(r.n))).attr('rx', 3).attr('fill', c)
+        .on('mousemove', (event) => dnKit.tip(el, event, [fmtDay(new Date(r.day + 'T00:00:00Z')), dnKit.fmtInt(r.n) + ' responses', dnKit.fmtInt(r.cumulative) + ' total so far']))
+        .on('mouseleave', () => dnKit.untip(el));
+      if (r.n > 0) g.append('text').attr('x', cx).attr('y', y(r.n) - 5).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg)').text(dnKit.fmtInt(r.n));
+    });
+    const every = Math.max(1, Math.ceil(rows.length / Math.max(1, Math.floor((W - left) / 56))));
+    rows.forEach((r, i) => {
+      if (i % every !== 0 && i !== rows.length - 1) return;
+      svg.append('text').attr('x', x(r.day) + x.bandwidth() / 2).attr('y', H - 8).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(fmtDay(new Date(r.day + 'T00:00:00Z')));
+    });
+    svg.append('line').attr('x1', left).attr('x2', W - 8).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-axis)').attr('stroke-width', 1);
+  });
+
+  dash.draw('cthemes', (el) => {
+    const rows = dnKit.ready(el, 'themeCounts');
+    if (!rows) return;
+    const question = dash.params().cq || '';
+    const picked = dash.params().ct || '';
+    const cd = dash.data('comments');
+    const comments = cd.status === 'ok' ? (cd.data || []).filter((cm) => !question || cm.question === question) : [];
+    const labelOf = new Map(rows.filter((r) => r.question === 'All questions').map((r) => [r.theme, r.label]));
+    const items = rows
+      .filter((r) => r.question === (question || 'All questions') && r.n > 0)
+      .map((r) => ({ key: r.theme, label: r.label, n: r.n, share: r.share, base: r.base, description: r.description, quote: r.quote }));
+    const untagged = comments.filter((cm) => !cm.coded);
+    if (untagged.length) items.push({ key: '__new', label: 'Not yet themed', n: untagged.length, share: null, base: null, description: 'Newer comments that the next refresh will tag.', quote: '' });
+    if (items.length === 0) { el.replaceChildren(dnKit.base('No comments for this question yet.')); return; }
+    const c = dnKit.color();
+    const out = [];
+    for (const it of items) {
+      const open = it.key === picked;
+      const tipLines = it.share == null
+        ? [it.label, dnKit.fmtInt(it.n) + ' comments']
+        : [it.label, dnKit.fmtInt(it.n) + ' comments', dnKit.fmtPct(it.share) + ' of ' + dnKit.fmtInt(it.base) + ' tagged comments'];
+      const row = dnKit.barRow(
+        el,
+        it.label,
+        dnKit.fmtInt(it.n) + (it.share == null ? '' : ' · ' + dnKit.fmtPct(it.share)),
+        [{ share: it.share ?? 0, color: c }],
+        tipLines,
+      );
+      row.classList.add('dn-theme-row');
+      if (open) row.classList.add('is-picked');
+      row.tabIndex = 0;
+      row.setAttribute('role', 'button');
+      row.setAttribute('aria-expanded', String(open));
+      const desc = document.createElement('span');
+      desc.className = 'dn-theme-desc';
+      desc.textContent = it.description;
+      row.append(desc);
+      if (it.quote && !open) {
+        const q = document.createElement('q');
+        q.className = 'dn-theme-quote';
+        q.textContent = it.quote;
+        row.append(q);
+      }
+      const hint = document.createElement('span');
+      hint.className = 'dn-theme-hint';
+      hint.textContent = open ? 'Hide comments' : 'Read the ' + dnKit.fmtInt(it.n) + ' comments';
+      row.append(hint);
+      const toggle = () => dash.setParams({ ct: open ? null : it.key });
+      row.addEventListener('click', toggle);
+      row.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+      out.push(row);
+      if (!open) continue;
+      const box = document.createElement('div');
+      box.className = 'dn-theme-comments';
+      const list = comments.filter((cm) => (it.key === '__new' ? !cm.coded : cm.themeKeys.split(' ').includes(it.key)));
+      if (list.length === 0) {
+        box.append(dnKit.base('Loading comments…'));
+      } else {
+        const ul = document.createElement('ul');
+        for (const cm of list) {
+          const li = document.createElement('li');
+          li.dataset.key = String(cm.id);
+          const text = document.createElement('p');
+          text.className = 'dn-cmt-text';
+          text.textContent = cm.comment;
+          const meta = document.createElement('span');
+          meta.className = 'dn-cmt-meta';
+          const also = cm.themeKeys.split(' ').filter((k) => k && k !== it.key).map((k) => labelOf.get(k) || k);
+          meta.textContent = cm.question + (also.length ? ' · Also: ' + also.join('; ') : '');
+          li.append(text, meta);
+          ul.append(li);
+        }
+        box.append(ul);
+      }
+      out.push(box);
+    }
+    el.replaceChildren(...out);
+  });
+</script>
+<script>
+  const dnPages = ['responding', 'readout', 'comments', 'fund'];
+  const dnShow = (id) => {
+    document.querySelectorAll('.dn-page').forEach((s) => { s.hidden = s.id !== id; });
+    document.querySelectorAll('.dn-tab').forEach((b) => { b.setAttribute('aria-selected', String(b.dataset.tab === id)); });
+  };
+  document.querySelectorAll('.dn-tab').forEach((b) => {
+    b.addEventListener('click', () => { dnShow(b.dataset.tab); dash.setLink(b.dataset.tab); });
+  });
+  const dnStart = location.hash.slice(1);
+  if (dnPages.includes(dnStart)) dnShow(dnStart);
+
+  document.querySelectorAll('.dn-cq').forEach((sel) => {
+    sel.addEventListener('change', () => dash.setParams({ cq: sel.value || null }));
+  });
+  dash.onData(() => {
+    document.querySelectorAll('.dn-cq').forEach((sel) => { sel.value = dash.params().cq ?? ''; });
+  });
+</script>
+<script>
+  dash.__start({ responses: 'data/survey-responses.json', codes: 'data/comment-codes.json', themes: 'data/comment-themes.json' });
+</script>
+</body>
+</html>
