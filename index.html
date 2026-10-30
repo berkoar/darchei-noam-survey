@@ -181,10 +181,10 @@
   .dn-x-controls .dn-x-wide { flex: 2 1 20rem; }
   .dn-x-controls select, .dn-x-controls input { width: 100%; min-height: 40px; }
   .dn-x-controls .dn-clear { min-height: 40px; }
-  .dn-x-result, .dn-x-comments-out { position: relative; display: flex; flex-direction: column; gap: var(--cds-gap-md); min-height: 6rem; }
+  .dn-x-result { position: relative; display: flex; flex-direction: column; gap: var(--cds-gap-md); min-height: 6rem; }
   .dn-x-head { display: flex; flex-direction: column; gap: 2px; }
   .dn-x-title { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
-  .dn-x-sub, .dn-x-count { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-x-sub { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
   .dn-x-derived .dn-bar-label { font-weight: var(--cds-font-weight-medium); }
   .dn-x-scroll { overflow-x: auto; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
   .dn-x-table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
@@ -206,8 +206,6 @@
   .dn-x-bar i { display: block; height: 100%; border-radius: 3px; background: var(--dn-c0, currentColor); }
   .dn-x-table .is-base .dn-x-bar i { background: var(--cds-chart-muted); }
   .dn-x-notes { margin: 0; padding-left: 1.1rem; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); display: flex; flex-direction: column; gap: 2px; max-width: 80ch; }
-  .dn-x-comments { margin-left: 0; }
-  .dn-x-comments mark { background: color-mix(in srgb, var(--dn-c0, #2b6cb0) 22%, transparent); color: inherit; border-radius: 2px; padding: 0 1px; }
   @media (max-width: 48rem) {
     .dn-story-side { flex-basis: 100%; }
     .dn-story-nav { flex-direction: row; overflow-x: auto; padding-bottom: var(--cds-pad-xs); }
@@ -565,7 +563,6 @@
       <button type="button" class="dn-x-chip" data-target="card-explore" data-params='{"xq":"Why not a member","xby":null,"xf":null}'>Why non-members haven't joined</button>
       <button type="button" class="dn-x-chip" data-target="card-explore" data-params='{"xq":"Likely to give","xby":"all:years","xf":"mem:member"}'>Members' likelihood to give, by years in the community</button>
       <button type="button" class="dn-x-chip" data-target="card-explore" data-params='{"xq":"Top three areas","xby":"all:gender","xf":null}'>Top priorities: men and women</button>
-      <button type="button" class="dn-x-chip" data-target="card-explore-comments" data-params='{"xt":"women","xcq":null,"xcf":"mem:member","xs":null}'>What members say about the women's section</button>
     </div>
 
     <article class="dn-card" id="card-explore">
@@ -583,33 +580,6 @@
         <button type="button" class="dn-clear" id="x-reset">Start over</button>
       </div>
       <div class="dn-x-result dash-skeleton" data-draw="explore" data-source="exploreAnswers"></div>
-    </article>
-
-    <article class="dn-card" id="card-explore-comments">
-      <h3 class="dn-card-title">Find comments</h3>
-      <p class="dn-card-note">Narrow the written comments by theme, question and group, or look for a word. Comments are only shown for groups of 5 or more people.</p>
-      <div class="dn-filters dn-x-controls">
-        <label class="dn-filter" for="xt-select">Theme
-          <select id="xt-select"><option value="">All themes</option></select>
-        </label>
-        <label class="dn-filter" for="xcq-select">Question
-          <select id="xcq-select">
-            <option value="">All questions</option>
-            <option value="Current building">Anything else about the current building</option>
-            <option value="One improvement">One improvement that would make the biggest difference</option>
-            <option value="Building fund">Questions or concerns about the building fund</option>
-            <option value="Anything else">Anything else to consider</option>
-          </select>
-        </label>
-        <label class="dn-filter" for="xcf-select">From
-          <select id="xcf-select"></select>
-        </label>
-        <label class="dn-filter" for="xs-input">Words
-          <input id="xs-input" type="search" placeholder="For example, kiddush" autocomplete="off">
-        </label>
-        <button type="button" class="dn-clear" id="xc-reset">Start over</button>
-      </div>
-      <div class="dn-x-comments-out dash-skeleton" data-draw="explore-comments" data-source="comments"></div>
     </article>
   </section>
 </div>
@@ -906,7 +876,7 @@
   dash.calc('comments', {
     inputs: ['responses', 'codes', 'themes'],
     title: 'Written comments',
-    description: 'Every written comment from the four open questions, with the themes Claude tagged it with and the number of the response it came from; newer comments show as not yet themed, and blank answers like "n/a" are left out.',
+    description: 'Every written comment from the four open questions, with the themes Claude tagged it with; newer comments show as not yet themed, and blank answers like "n/a" are left out.',
     fn: (responses, codes, themes) => {
       const QUESTIONS = [
         ['Comment: current building', 'Current building'],
@@ -919,7 +889,7 @@
       const coded = new Map(codes.map((c) => [c.question + '\u0001' + String(c.text).trim(), c]));
       const out = [];
       for (const [column, question] of QUESTIONS) {
-        for (const [index, r] of responses.entries()) {
+        for (const r of responses) {
           const text = String(r[column] || '').trim();
           if (BLANK.includes(text.toLowerCase())) continue;
           const code = coded.get(column + '\u0001' + text);
@@ -932,7 +902,6 @@
             themes: code ? keys.map((k) => labelOf.get(k) || k).join(', ') : 'Not yet themed',
             themeKeys: keys.join(' '),
             coded: Boolean(code),
-            respondent: index + 1,
           });
         }
       }
@@ -1874,78 +1843,6 @@
     }
     el.replaceChildren(...parts);
   });
-
-  dash.draw('explore-comments', (el) => {
-    const comments = dnKit.ready(el, 'comments');
-    if (!comments) return;
-    const ea = dash.data('exploreAnswers');
-    if (ea.status !== 'ok') { el.classList.add('dash-skeleton'); el.replaceChildren(); return; }
-    const X = window.dnExplore;
-    const idx = X.index(ea.data || []);
-    const p = dash.params();
-    const parts = [];
-    let list = comments;
-    const group = X.GROUP.get(p.xcf || '') || null;
-    if (group) {
-      const ids = new Set(idx.ids.filter((id) => X.inGroup(idx, id, group)));
-      if (ids.size < X.MIN_SHOWN) {
-        el.replaceChildren(dnKit.base('Comments are only shown for groups of ' + X.MIN_SHOWN + ' or more people. Pick a larger group.'));
-        return;
-      }
-      list = list.filter((c) => ids.has(c.respondent));
-    }
-    if (p.xt === '__new') list = list.filter((c) => !c.coded);
-    else if (p.xt) list = list.filter((c) => c.themeKeys.split(' ').includes(p.xt));
-    if (p.xcq) list = list.filter((c) => c.question === p.xcq);
-    const norm = (s) => String(s).toLowerCase().replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
-    const words = norm(p.xs || '').trim();
-    if (words) list = list.filter((c) => norm(c.comment).includes(words));
-
-    const count = document.createElement('p');
-    count.className = 'dn-x-count';
-    count.textContent = list.length === 1 ? '1 comment' : dnKit.fmtInt(list.length) + ' comments';
-    parts.push(count);
-    if (list.length === 0) {
-      parts.push(dnKit.base('No comments match. Try another theme, question or group, or fewer words.'));
-      el.replaceChildren(...parts);
-      return;
-    }
-    const box = document.createElement('div');
-    box.className = 'dn-theme-comments dn-x-comments';
-    const ul = document.createElement('ul');
-    const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    for (const cm of list) {
-      const li = document.createElement('li');
-      li.dataset.key = String(cm.id);
-      const text = document.createElement('p');
-      text.className = 'dn-cmt-text';
-      if (words) {
-        const source = String(cm.comment);
-        const lower = norm(source);
-        let at = 0;
-        const re = new RegExp(escape(words), 'g');
-        let m;
-        while ((m = re.exec(lower))) {
-          if (m.index > at) text.append(document.createTextNode(source.slice(at, m.index)));
-          const mark = document.createElement('mark');
-          mark.textContent = source.slice(m.index, m.index + words.length);
-          text.append(mark);
-          at = m.index + words.length;
-        }
-        if (at < source.length) text.append(document.createTextNode(source.slice(at)));
-      } else {
-        text.textContent = cm.comment;
-      }
-      const meta = document.createElement('span');
-      meta.className = 'dn-cmt-meta';
-      meta.textContent = cm.question + ' · ' + cm.themes;
-      li.append(text, meta);
-      ul.append(li);
-    }
-    box.append(ul);
-    parts.push(box);
-    el.replaceChildren(...parts);
-  });
 </script>
 <script>
   const dnPages = ['responding', 'readout', 'comments', 'fund', 'explore'];
@@ -2000,20 +1897,14 @@
     const qSel = document.getElementById('xq-select');
     const bySel = document.getElementById('xby-select');
     const fSel = document.getElementById('xf-select');
-    const tSel = document.getElementById('xt-select');
-    const cqSel = document.getElementById('xcq-select');
-    const cfSel = document.getElementById('xcf-select');
-    const search = document.getElementById('xs-input');
-    if (!X || !qSel || !bySel || !fSel || !tSel || !cqSel || !cfSel || !search) return;
+    if (!X || !qSel || !bySel || !fSel) return;
     const opt = (value, text) => { const o = document.createElement('option'); o.value = value; o.textContent = text; return o; };
     const group = (label, children) => { const el = document.createElement('optgroup'); el.label = label; el.append(...children); return el; };
     X.SECTIONS.forEach(([section, list]) => qSel.append(group(section, list.map((q) => opt(q.key, q.label)))));
     bySel.append(opt('', 'No comparison'));
     X.DIMS.forEach((d) => bySel.append(group(d.label, [opt('all:' + d.id, 'All groups side by side'), ...d.groups.map((gr) => opt(d.id + ':' + gr.id, gr.label + ' vs. everyone else'))])));
-    [fSel, cfSel].forEach((sel) => {
-      sel.append(opt('', 'Everyone'));
-      X.DIMS.forEach((d) => sel.append(group(d.label, d.groups.map((gr) => opt(d.id + ':' + gr.id, gr.label)))));
-    });
+    fSel.append(opt('', 'Everyone'));
+    X.DIMS.forEach((d) => fSel.append(group(d.label, d.groups.map((gr) => opt(d.id + ':' + gr.id, gr.label)))));
 
     const setSel = (sel, value) => { const v = value ?? ''; if ([...sel.options].some((o) => o.value === v)) sel.value = v; };
     const sync = () => {
@@ -2021,45 +1912,23 @@
       setSel(qSel, p.xq || X.DEFAULT_Q);
       setSel(bySel, p.xby);
       setSel(fSel, p.xf);
-      setSel(tSel, p.xt);
-      setSel(cqSel, p.xcq);
-      setSel(cfSel, p.xcf);
-      if (document.activeElement !== search) search.value = p.xs ?? '';
-    };
-    const fillThemes = () => {
-      if (tSel.dataset.filled) return;
-      const d = dash.data('themeCounts');
-      if (d.status !== 'ok') return;
-      const rows = (d.data || []).filter((r) => r.question === 'All questions' && r.n > 0);
-      tSel.append(...rows.map((r) => opt(r.theme, r.label + ' (' + dnKit.fmtInt(r.n) + ')')));
-      const cd = dash.data('comments');
-      const untagged = cd.status === 'ok' ? (cd.data || []).filter((c) => !c.coded).length : 0;
-      if (untagged) tSel.append(opt('__new', 'Not yet themed (' + dnKit.fmtInt(untagged) + ')'));
-      tSel.dataset.filled = '1';
     };
     const put = (next) => { dash.setParams(next); sync(); };
-    [[qSel, 'xq'], [bySel, 'xby'], [fSel, 'xf'], [tSel, 'xt'], [cqSel, 'xcq'], [cfSel, 'xcf']].forEach(([sel, key]) => {
+    [[qSel, 'xq'], [bySel, 'xby'], [fSel, 'xf']].forEach(([sel, key]) => {
       sel.addEventListener('change', () => put({ [key]: sel.value || null }));
     });
-    let typing = null;
-    search.addEventListener('input', () => {
-      clearTimeout(typing);
-      typing = setTimeout(() => dash.setParams({ xs: search.value.trim() || null }), 300);
-    });
     document.getElementById('x-reset')?.addEventListener('click', () => put({ xq: null, xby: null, xf: null }));
-    document.getElementById('xc-reset')?.addEventListener('click', () => { search.value = ''; put({ xt: null, xcq: null, xcf: null, xs: null }); });
     document.querySelectorAll('.dn-x-chip').forEach((b) => {
       b.addEventListener('click', () => {
         let next = {};
         try { next = JSON.parse(b.dataset.params || '{}'); } catch (e) { return; }
-        if ('xs' in next) search.value = next.xs || '';
         put(next);
         const target = document.getElementById(b.dataset.target || '');
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
     sync();
-    dash.onData(() => { fillThemes(); sync(); });
+    dash.onData(sync);
   })();
 </script>
 <script>
