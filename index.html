@@ -159,7 +159,9 @@
   .dn-cmt-meta { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
   .dn [hidden] { display: none !important; }
   .dn-reader { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); align-items: flex-start; }
-  .dn-story-nav { flex: 1 1 15rem; min-width: 0; display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .dn-story-side { flex: 1 1 15rem; min-width: 0; display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .dn-story-order { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-story-nav { min-width: 0; display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
   .dn-story-panel { flex: 999 1 32rem; min-width: 0; display: flex; flex-direction: column; }
   .dn-story-tab { appearance: none; font: inherit; text-align: left; cursor: pointer; color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); min-height: 44px; display: flex; flex-direction: column; gap: 2px; }
   .dn-story-tab:hover { border-color: var(--color-fg-muted); }
@@ -171,7 +173,8 @@
   .dn-story-panel .dn-story-body { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
   .dn-story-panel .dn-sentence { max-width: 72ch; }
   @media (max-width: 48rem) {
-    .dn-story-nav { flex-basis: 100%; flex-direction: row; overflow-x: auto; padding-bottom: var(--cds-pad-xs); }
+    .dn-story-side { flex-basis: 100%; }
+    .dn-story-nav { flex-direction: row; overflow-x: auto; padding-bottom: var(--cds-pad-xs); }
     .dn-story-tab { flex: 0 0 13rem; }
   }
 </style>
@@ -205,7 +208,7 @@
     <div class="dn-tile" id="tile-kids">
       <span class="dn-tile-label">Children at home (estimate)</span>
       <span class="dn-tile-value"><span class="dn-tile-prefix">About</span> <span class="dash-skeleton" data-draw="num" data-source="totals" data-field="kidsRounded" data-row="0" data-fmt="int">—</span></span>
-      <span class="dn-tile-note"><b data-draw="num" data-source="totals" data-field="kidsCount" data-row="0" data-fmt="int">—</b> counted across age groups. About <b data-draw="num" data-source="totals" data-field="likelyCouples" data-row="0" data-fmt="int">—</b> couples seem to have both answered, so their children count once.</span>
+      <span class="dn-tile-note">About <b data-draw="num" data-source="totals" data-field="bmRounded" data-row="0" data-fmt="int">—</b> bar and bat mitzvahs likely in the next ten years</span>
     </div>
   </div>
 
@@ -266,31 +269,28 @@
   <section class="dn-page" id="readout" role="tabpanel" aria-labelledby="tab-readout" hidden>
     <p class="dn-section-note">Each story pulls together the questions about one part of the building, plus the written comments on the same topic. Pick a story to read it; the full results for every question follow below. Problem ratings count only the people each item applies to, and the numbers will shift until the survey closes.</p>
     <div class="dn-reader">
-      <div class="dn-story-nav" role="tablist" aria-label="Stories" aria-orientation="vertical">
+      <div class="dn-story-side">
+        <p class="dn-story-order">Building areas are listed by how many people rate each one essential or very important.</p>
+      <div class="dn-story-nav" role="tablist" aria-label="Stories" aria-orientation="vertical" data-draw="story-order" data-source="importance">
         <button type="button" class="dn-story-tab" role="tab" id="st-overall" data-story="overall" aria-controls="story-overall" aria-selected="true">
           <span class="dn-story-tab-title">Across the building</span>
-          <span class="dn-story-tab-stat"><b data-draw="num" data-source="story" data-field="crowdChanged" data-row="0" data-fmt="pct">—</b> say crowding changed their plans at least sometimes</span>
         </button>
         <button type="button" class="dn-story-tab" role="tab" id="st-social-hall" data-story="social-hall" aria-controls="story-social-hall" aria-selected="false">
           <span class="dn-story-tab-title">Social hall and simchas</span>
-          <span class="dn-story-tab-stat"><b data-draw="num" data-source="story" data-field="shKiddush" data-row="0" data-fmt="pct">—</b> call kiddush crowding a major problem</span>
         </button>
         <button type="button" class="dn-story-tab" role="tab" id="st-sanctuary" data-story="sanctuary" aria-controls="story-sanctuary" aria-selected="false">
           <span class="dn-story-tab-title">Sanctuary and davening</span>
-          <span class="dn-story-tab-stat"><b data-draw="num" data-source="story" data-field="mainImportant" data-row="0" data-fmt="pct">—</b> rate the sanctuary essential or very important</span>
         </button>
         <button type="button" class="dn-story-tab" role="tab" id="st-youth" data-story="youth" aria-controls="story-youth" aria-selected="false">
           <span class="dn-story-tab-title">Youth and young families</span>
-          <span class="dn-story-tab-stat">Better youth facilities is the #<b data-draw="num" data-source="story" data-field="youthOutcomeRank" data-row="0" data-fmt="int">—</b> outcome people want</span>
         </button>
         <button type="button" class="dn-story-tab" role="tab" id="st-access" data-story="access" aria-controls="story-access" aria-selected="false">
           <span class="dn-story-tab-title">Safety, access and getting around</span>
-          <span class="dn-story-tab-stat">#<b data-draw="num" data-source="story" data-field="cSafetyRank" data-row="0" data-fmt="int">—</b> theme in the written comments</span>
         </button>
         <button type="button" class="dn-story-tab" role="tab" id="st-fund" data-story="fund" aria-controls="story-fund" aria-selected="false">
           <span class="dn-story-tab-title">Building fund and communication</span>
-          <span class="dn-story-tab-stat"><b data-draw="num" data-source="story" data-field="timelineAgree" data-row="0" data-fmt="pct">—</b> of members are confident in the timeline</span>
         </button>
+      </div>
       </div>
       <div class="dn-story-panel">
       <article class="dn-card dn-story" id="story-overall" role="tabpanel" aria-labelledby="st-overall">
@@ -350,7 +350,7 @@
     <div class="dn-grid">
       <article class="dn-card dn-card-wide" id="card-problems">
         <h4 class="dn-card-title">Problems in the current building</h4>
-        <p class="dn-card-note">Share of the people each item applies to ("Doesn't apply to me" answers are left out), sorted by how many call it a major problem.</p>
+        <p class="dn-card-note">Share of the people each item applies to ("Doesn't apply to me" answers are left out), sorted by how many call it a major problem. "Overall" counts major and minor together.</p>
         <ul class="dn-legend">
           <li><span class="dn-key dn-key-1"></span>Major problem</li>
           <li><span class="dn-key dn-key-2"></span>Minor problem</li>
@@ -664,7 +664,7 @@
   dash.calc('totals', {
     inputs: ['responses', 'who'],
     title: 'Response totals',
-    description: 'All responses, members and everyone else, the member share, respondents with children at home, an estimate of children at home, and the outreach line used for Few responses tags. The estimate counts one child per age group each respondent picked, then counts a likely couple\'s children once: a man and a woman who picked exactly the same age groups and also match on at least two of walking time, years in the community and age range.',
+    description: 'All responses, members and everyone else, the member share, respondents with children at home, an estimate of children at home, a rough count of bar and bat mitzvahs in the next ten years (the children estimate times the share expecting one), and the outreach line used for Few responses tags. The estimate counts one child per age group each respondent picked, then counts a likely couple\'s children once: a man and a woman who picked exactly the same age groups and also match on at least two of walking time, years in the community and age range.',
     fn: (responses, who) => {
       const total = responses.length;
       const members = responses.filter((r) => r['Membership'] === 'I am a member of Darchei Noam (individually or as part of a family membership)').length;
@@ -694,6 +694,8 @@
       men.forEach((m, i) => { if (pair(i, new Set())) couples += 1; });
       const counted = partner.reduce((s, i, j) => s + (i === -1 ? 0 : women[j].n), 0);
       const kidsEstimate = kidsCount - counted;
+      const bmAnswered = responses.filter((r) => r['Bar/bat mitzvah in 10 years']);
+      const bmShare = bmAnswered.length ? bmAnswered.filter((r) => r['Bar/bat mitzvah in 10 years'] === 'Yes').length / bmAnswered.length : 0;
       return [{
         total,
         members,
@@ -705,6 +707,8 @@
         likelyCouples: couples,
         kidsEstimate,
         kidsRounded: Math.round(kidsEstimate / 10) * 10,
+        bmShare,
+        bmRounded: Math.round((kidsEstimate * bmShare) / 10) * 10,
         threshold: who.length ? who[0].threshold : null,
       }];
     },
@@ -1131,9 +1135,9 @@
     el.replaceChildren(...rows.map((r) => dnKit.barRow(
       el,
       r.item,
-      dnKit.fmtPct(r.majorShare) + ' major',
+      dnKit.fmtPct(r.majorShare) + ' major · ' + dnKit.fmtPct(r.majorShare + r.minorShare) + ' overall',
       [{ share: r.majorShare, color: crit }, { share: r.minorShare, color: crit, opacity: 0.45 }],
-      [r.item, 'Major problem: ' + dnKit.fmtPct(r.majorShare) + ' (' + dnKit.fmtInt(r.major) + ')', 'Minor problem: ' + dnKit.fmtPct(r.minorShare) + ' (' + dnKit.fmtInt(r.minor) + ')', 'Applies to ' + dnKit.fmtInt(r.base) + (r.notApply ? '; ' + dnKit.fmtInt(r.notApply) + " said it doesn't apply" : '')],
+      [r.item, 'Major problem: ' + dnKit.fmtPct(r.majorShare) + ' (' + dnKit.fmtInt(r.major) + ')', 'Minor problem: ' + dnKit.fmtPct(r.minorShare) + ' (' + dnKit.fmtInt(r.minor) + ')', 'Major or minor: ' + dnKit.fmtPct(r.majorShare + r.minorShare), 'Applies to ' + dnKit.fmtInt(r.base) + (r.notApply ? '; ' + dnKit.fmtInt(r.notApply) + " said it doesn't apply" : '')],
     )));
   });
 
@@ -1290,6 +1294,23 @@
     }
     el.replaceChildren(...out);
   });
+
+  dash.draw('story-order', (nav) => {
+    const d = dash.data('importance');
+    if (d.status !== 'ok') return;
+    const rows = d.data || [];
+    const high = (item) => (rows.find((r) => r.item === item) || {}).highShare ?? 0;
+    const anchor = {
+      sanctuary: high('Main sanctuary and davening spaces'),
+      'social-hall': high('Social hall, kiddush and simcha space'),
+      youth: high("Dedicated youth and children's spaces"),
+      access: high('Ease of movement'),
+    };
+    const tabs = [...nav.querySelectorAll('.dn-story-tab')];
+    const tab = (id) => tabs.find((t) => t.dataset.story === id);
+    const areas = Object.keys(anchor).sort((a, b) => anchor[b] - anchor[a]);
+    nav.append(...['overall', ...areas, 'fund'].map(tab).filter(Boolean));
+  });
 </script>
 <script>
   const dnPages = ['responding', 'readout', 'comments', 'fund'];
@@ -1320,7 +1341,7 @@
     });
     document.querySelectorAll('.dn-story-panel .dn-story').forEach((a) => { a.hidden = a.id !== 'story-' + pick; });
   };
-  document.querySelectorAll('.dn-story-tab').forEach((b, i, all) => {
+  document.querySelectorAll('.dn-story-tab').forEach((b) => {
     b.addEventListener('click', () => {
       dnStory(b.dataset.story);
       dash.setParams({ story: b.dataset.story === 'overall' ? null : b.dataset.story });
@@ -1329,7 +1350,9 @@
       const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
       if (!step) return;
       e.preventDefault();
-      const next = all[(i + step + all.length) % all.length];
+      const list = [...document.querySelectorAll('.dn-story-tab')];
+      const at = list.indexOf(b);
+      const next = list[(at + step + list.length) % list.length];
       next.focus();
       next.click();
     });
