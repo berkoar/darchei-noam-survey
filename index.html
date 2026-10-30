@@ -172,10 +172,50 @@
   .dn-story-tab-stat b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
   .dn-story-panel .dn-story-body { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
   .dn-story-panel .dn-sentence { max-width: 72ch; }
+  .dn-x-try { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: center; }
+  .dn-x-try-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-x-chip { appearance: none; font: inherit; font-size: var(--cds-font-size-caption); text-align: left; color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 999px; padding: var(--cds-pad-xs) var(--cds-pad-md); min-height: 36px; cursor: pointer; }
+  .dn-x-chip:hover { border-color: var(--color-fg-muted); }
+  .dn-x-chip:focus-visible, .dn-x-scroll:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+  .dn-x-controls .dn-filter { flex: 1 1 13rem; }
+  .dn-x-controls .dn-x-wide { flex: 2 1 20rem; }
+  .dn-x-controls select, .dn-x-controls input { width: 100%; min-height: 40px; }
+  .dn-x-controls .dn-clear { min-height: 40px; }
+  .dn-x-result, .dn-x-comments-out { position: relative; display: flex; flex-direction: column; gap: var(--cds-gap-md); min-height: 6rem; }
+  .dn-x-head { display: flex; flex-direction: column; gap: 2px; }
+  .dn-x-title { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+  .dn-x-sub, .dn-x-count { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-x-derived .dn-bar-label { font-weight: var(--cds-font-weight-medium); }
+  .dn-x-scroll { overflow-x: auto; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+  .dn-x-table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .dn-x-table th, .dn-x-table td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); text-align: left; vertical-align: bottom; }
+  .dn-x-table tbody th, .dn-x-table tbody td { vertical-align: top; }
+  .dn-x-swipe { display: none; margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .dn-x-table thead th { min-width: 6.5rem; font-weight: var(--cds-font-weight-medium); color: var(--color-fg); }
+  .dn-x-table thead th > span { display: block; }
+  .dn-x-table thead .dn-chip { display: inline-block; margin-top: 2px; font-weight: 400; }
+  .dn-x-n { font-weight: 400; color: var(--color-fg-muted); }
+  .dn-x-table tbody th { min-width: 10rem; max-width: 18rem; font-weight: 400; color: var(--color-fg); }
+  .dn-x-table tr > :first-child { position: sticky; left: 0; z-index: 1; background: var(--color-panel); }
+  .dn-x-table tr.is-derived > * { font-weight: var(--cds-font-weight-medium); border-bottom-width: 2px; }
+  .dn-x-table tr.is-aside > * { color: var(--color-fg-muted); }
+  .dn-x-table tbody tr:last-child > * { border-bottom: 0; }
+  .dn-x-cell { display: flex; flex-direction: column; gap: 3px; min-width: 4.5rem; }
+  .dn-x-val { color: var(--color-fg); }
+  .dn-x-bar { display: block; height: 6px; border-radius: 3px; background: var(--cds-chart-grid); overflow: hidden; }
+  .dn-x-bar i { display: block; height: 100%; border-radius: 3px; background: var(--dn-c0, currentColor); }
+  .dn-x-table .is-base .dn-x-bar i { background: var(--cds-chart-muted); }
+  .dn-x-notes { margin: 0; padding-left: 1.1rem; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); display: flex; flex-direction: column; gap: 2px; max-width: 80ch; }
+  .dn-x-comments { margin-left: 0; }
+  .dn-x-comments mark { background: color-mix(in srgb, var(--dn-c0, #2b6cb0) 22%, transparent); color: inherit; border-radius: 2px; padding: 0 1px; }
   @media (max-width: 48rem) {
     .dn-story-side { flex-basis: 100%; }
     .dn-story-nav { flex-direction: row; overflow-x: auto; padding-bottom: var(--cds-pad-xs); }
     .dn-story-tab { flex: 0 0 13rem; }
+    .dn-x-swipe { display: block; }
+    .dn-x-table tbody th { min-width: 7.5rem; max-width: 9rem; }
+    .dn-x-table thead th { min-width: 5.5rem; }
+    .dn-x-cell { min-width: 3.5rem; }
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -217,6 +257,7 @@
     <button class="dn-tab" role="tab" id="tab-readout" data-tab="readout" aria-controls="readout" aria-selected="false" type="button">What we're hearing</button>
     <button class="dn-tab" role="tab" id="tab-comments" data-tab="comments" aria-controls="comments" aria-selected="false" type="button">Comments</button>
     <button class="dn-tab" role="tab" id="tab-fund" data-tab="fund" aria-controls="fund" aria-selected="false" type="button">Building fund</button>
+    <button class="dn-tab" role="tab" id="tab-explore" data-tab="explore" aria-controls="explore" aria-selected="false" type="button">Explore</button>
   </nav>
 
   <section class="dn-page" id="responding" role="tabpanel" aria-labelledby="tab-responding">
@@ -515,6 +556,62 @@
       </article>
     </div>
   </section>
+
+  <section class="dn-page" id="explore" role="tabpanel" aria-labelledby="tab-explore" hidden>
+    <p class="dn-section-note">Ask your own questions of the responses. Pick a question, then compare groups side by side or narrow it to one group. Every number is counted straight from the responses, the same way as the rest of the dashboard.</p>
+    <div class="dn-x-try">
+      <span class="dn-x-try-label">Try one:</span>
+      <button type="button" class="dn-x-chip" data-target="card-explore" data-params='{"xq":"Problem: Crowding in the Social Hall during kiddush","xby":"kids:u3","xf":null}'>Kiddush crowding: families with kids under 3 vs. everyone else</button>
+      <button type="button" class="dn-x-chip" data-target="card-explore" data-params='{"xq":"Why not a member","xby":null,"xf":null}'>Why non-members haven't joined</button>
+      <button type="button" class="dn-x-chip" data-target="card-explore" data-params='{"xq":"Likely to give","xby":"all:years","xf":"mem:member"}'>Members' likelihood to give, by years in the community</button>
+      <button type="button" class="dn-x-chip" data-target="card-explore" data-params='{"xq":"Top three areas","xby":"all:gender","xf":null}'>Top priorities: men and women</button>
+      <button type="button" class="dn-x-chip" data-target="card-explore-comments" data-params='{"xt":"women","xcq":null,"xcf":"mem:member","xs":null}'>What members say about the women's section</button>
+    </div>
+
+    <article class="dn-card" id="card-explore">
+      <h3 class="dn-card-title">Compare groups</h3>
+      <div class="dn-filters dn-x-controls">
+        <label class="dn-filter dn-x-wide" for="xq-select">Question
+          <select id="xq-select"></select>
+        </label>
+        <label class="dn-filter" for="xby-select">Compare
+          <select id="xby-select"></select>
+        </label>
+        <label class="dn-filter" for="xf-select">Only include
+          <select id="xf-select"></select>
+        </label>
+        <button type="button" class="dn-clear" id="x-reset">Start over</button>
+      </div>
+      <div class="dn-x-result dash-skeleton" data-draw="explore" data-source="exploreAnswers"></div>
+    </article>
+
+    <article class="dn-card" id="card-explore-comments">
+      <h3 class="dn-card-title">Find comments</h3>
+      <p class="dn-card-note">Narrow the written comments by theme, question and group, or look for a word. Comments are only shown for groups of 5 or more people.</p>
+      <div class="dn-filters dn-x-controls">
+        <label class="dn-filter" for="xt-select">Theme
+          <select id="xt-select"><option value="">All themes</option></select>
+        </label>
+        <label class="dn-filter" for="xcq-select">Question
+          <select id="xcq-select">
+            <option value="">All questions</option>
+            <option value="Current building">Anything else about the current building</option>
+            <option value="One improvement">One improvement that would make the biggest difference</option>
+            <option value="Building fund">Questions or concerns about the building fund</option>
+            <option value="Anything else">Anything else to consider</option>
+          </select>
+        </label>
+        <label class="dn-filter" for="xcf-select">From
+          <select id="xcf-select"></select>
+        </label>
+        <label class="dn-filter" for="xs-input">Words
+          <input id="xs-input" type="search" placeholder="For example, kiddush" autocomplete="off">
+        </label>
+        <button type="button" class="dn-clear" id="xc-reset">Start over</button>
+      </div>
+      <div class="dn-x-comments-out dash-skeleton" data-draw="explore-comments" data-source="comments"></div>
+    </article>
+  </section>
 </div>
   <footer class="dn-foot">Congregation Darchei Noam of Fair Lawn · Building Expansion Survey results, updated twice a day until the survey closes.</footer>
 </div>
@@ -809,7 +906,7 @@
   dash.calc('comments', {
     inputs: ['responses', 'codes', 'themes'],
     title: 'Written comments',
-    description: 'Every written comment from the four open questions, with the themes Claude tagged it with; newer comments show as not yet themed, and blank answers like "n/a" are left out.',
+    description: 'Every written comment from the four open questions, with the themes Claude tagged it with and the number of the response it came from; newer comments show as not yet themed, and blank answers like "n/a" are left out.',
     fn: (responses, codes, themes) => {
       const QUESTIONS = [
         ['Comment: current building', 'Current building'],
@@ -822,7 +919,7 @@
       const coded = new Map(codes.map((c) => [c.question + '\u0001' + String(c.text).trim(), c]));
       const out = [];
       for (const [column, question] of QUESTIONS) {
-        for (const r of responses) {
+        for (const [index, r] of responses.entries()) {
           const text = String(r[column] || '').trim();
           if (BLANK.includes(text.toLowerCase())) continue;
           const code = coded.get(column + '\u0001' + text);
@@ -835,6 +932,7 @@
             themes: code ? keys.map((k) => labelOf.get(k) || k).join(', ') : 'Not yet themed',
             themeKeys: keys.join(' '),
             coded: Boolean(code),
+            respondent: index + 1,
           });
         }
       }
@@ -1013,6 +1111,24 @@
         cLeadership: said('leadership'),
         cFundraising: said('fundraising'),
       }];
+    },
+  });
+
+  dash.calc('exploreAnswers', {
+    inputs: ['responses'],
+    title: 'Every answer, one row each',
+    description: 'Each multiple-choice answer as its own row: the response number, the question and the answer, so the Explore tab can count any question for any group. Pick-several questions give one row per answer picked; written comments and the submission date are left out.',
+    fn: (responses) => {
+      const skip = (c) => c === 'Submitted' || c.startsWith('Comment: ');
+      const out = [];
+      responses.forEach((r, index) => {
+        for (const question of Object.keys(r)) {
+          if (skip(question)) continue;
+          String(r[question] ?? '').split('\n').map((v) => v.trim().replace(/\\'/g, "'")).filter(Boolean)
+            .forEach((answer) => out.push({ respondent: index + 1, question, answer }));
+        }
+      });
+      return out;
     },
   });
 </script>
@@ -1311,9 +1427,528 @@
     const areas = Object.keys(anchor).sort((a, b) => anchor[b] - anchor[a]);
     nav.append(...['overall', ...areas, 'fund'].map(tab).filter(Boolean));
   });
+
+
+  window.dnExplore = (() => {
+    const MEMBER = 'I am a member of Darchei Noam (individually or as part of a family membership)';
+    const REGULAR = 'I am not a member, but I regularly daven or take part at Darchei Noam';
+    const OCCASIONAL = 'I am not a member and attend occasionally';
+    const FORMER = 'I am a former member';
+    const AGES = ['Under 3', 'Age 3 through pre-K', 'Kindergarten through 3rd grade', '4th through 8th grade', 'High school', 'Over 18'];
+    const LIKELY = ['Very likely', 'Somewhat likely', 'Not very likely', 'Not at all likely'];
+    const NOT_APPLY = "Doesn't apply to me";
+    const MIN_SHOWN = 5;
+    const FEW = 10;
+    const DEFAULT_Q = 'Top three areas';
+
+    const ORDER = {
+      'Membership': [MEMBER, REGULAR, OCCASIONAL, FORMER],
+      'Would join with more space': LIKELY,
+      'Years in community': ['Less than 1 year', '1–3 years', '4–7 years', '8–15 years', 'More than 15 years'],
+      'Gender': ['Male', 'Female', 'Prefer not to say'],
+      'Age': ['Under 30', '30–39', '40–49', '50–59', '60–69', '70 or older', 'Prefer not to say'],
+      'Children at home': ['No children living at home', ...AGES, 'Prefer not to say'],
+      'Shabbat mornings a month': ['Every Shabbat', '3', '2', '1', 'Fewer than one a month'],
+      'Usual minyan': ['7:15 in Main Sanctuary', '8:15 in Annex', '9:00 in Main Sanctuary', 'I usually come for Groups/Tot Shabbat only', 'I usually come for socialization purposes only', 'I usually daven at another shul on Shabbat morning', 'I rarely go to a shul on Shabbat'],
+      'Walk': ['Under 10 minutes', '10–20 minutes', '20–30 minutes', 'More than 30 minutes'],
+      'Crowding changed plans': ['Often', 'Sometimes', 'Rarely', 'Never'],
+      'Hosted a simcha': ['Yes', 'No'],
+      'Bar/bat mitzvah in 10 years': ['Yes', 'Maybe', 'No'],
+      'Would rent larger space': LIKELY,
+      'Guests needed': ['Fewer than 100', '100–149', '150–199', '200–249', '250 or more', 'Not sure'],
+      'Sanctuary seating': ['25% more (up to 250)', '50% more (up to 300)', '100% more (up to 400)', 'Not sure'],
+      'Fund familiarity': ['Very familiar', 'Somewhat familiar', "I've heard of it but don't know the details", 'Not familiar'],
+      'Knew $10,000 ask': ['Yes', 'No'],
+      'Household contributed': ['Yes', 'Not yet, but we plan to', 'No', 'Prefer not to say'],
+      'Likely to give': ['Very likely', 'Somewhat likely', 'Not sure yet', 'Unlikely', 'Prefer not to say'],
+    };
+    const KIND_ORDER = {
+      problem: ['Major problem', 'Minor problem', 'Not a problem'],
+      importance: ['Essential', 'Very important', 'Somewhat important', 'Low priority', 'Not a priority', 'Not sure'],
+      agree: ['Strongly agree', 'Agree', 'Not sure', 'Disagree', 'Strongly disagree'],
+    };
+    const DERIVED = {
+      problem: { label: 'Major or minor problem', parts: ['Major problem', 'Minor problem'] },
+      importance: { label: 'Essential or very important', parts: ['Essential', 'Very important'] },
+      agree: { label: 'Agree or strongly agree', parts: ['Strongly agree', 'Agree'] },
+    };
+    const SHORT = {
+      [MEMBER]: 'Member',
+      [REGULAR]: 'Non-member, comes regularly',
+      [OCCASIONAL]: 'Non-member, comes occasionally',
+      [FORMER]: 'Former member',
+      'I usually come for Groups/Tot Shabbat only': 'Groups or Tot Shabbat only',
+      'I usually come for socialization purposes only': 'Socializing only',
+      'I usually daven at another shul on Shabbat morning': 'Another shul',
+      'I rarely go to a shul on Shabbat': 'Rarely at shul on Shabbat',
+    };
+    const LAST = ['Other', 'None of these', 'Prefer not to say'];
+
+    const MEM = 'Asked of members only.';
+    const NON = 'Asked of non-members only.';
+    const SEVERAL = 'People could pick more than one answer, so shares can add up to more than 100%.';
+    const PROBLEMS = ['Crowding in the Main Sanctuary during the 9:00 minyan', 'Crowding in the Annex during the 8:15 minyan', 'Crowding in the Social Hall during kiddush', 'Noise and foot traffic in the hallway outside the Main Sanctuary during the 9:00 minyan', 'Noise in the Social Hall during kiddush', 'Not enough space for youth groups', 'Not enough coat room space, especially in winter', 'Strollers crowding the outside of the building', "Seating and sightlines in the women's section", 'Not enough restrooms', 'Getting into and around the building', 'Not enough space to host simchas and events'];
+    const SPACES = ['Main sanctuary and davening spaces', "Women's section layout and sightlines", 'Social hall, kiddush and simcha space', 'Kitchen and food service', 'Multipurpose rooms', "Dedicated youth and children's spaces", 'Adult learning and small gathering spaces', 'Lobby and entrance', 'Restrooms', 'Storage, coat room and stroller parking', 'Outdoor space', 'Ease of movement', 'Administrative space'];
+    const STATEMENTS = ['I understand why the shul needs to expand.', 'I understand what the building fund will pay for.', 'I trust the shul leadership to make good decisions about the building.', 'I am confident the project will move forward on a reasonable timeline.'];
+
+    const SECTIONS = [
+      ['About the person', [
+        { key: 'Membership', label: 'Membership' },
+        { key: 'Gender', label: 'Gender' },
+        { key: 'Age', label: 'Age' },
+        { key: 'Children at home', label: 'Children at home', note: 'People could pick more than one age group.' },
+        { key: 'Years in community', label: 'Years in the community' },
+        { key: 'Walk', label: 'Walk to shul' },
+      ]],
+      ['Shabbat at Darchei Noam', [
+        { key: 'Shabbat mornings a month', label: 'Shabbat mornings a month at Darchei Noam' },
+        { key: 'Usual minyan', label: 'Usual Shabbat morning minyan' },
+        { key: 'Shabbat activities', label: 'Shabbat activities they take part in', note: SEVERAL },
+        { key: 'Crowding changed plans', label: 'How often crowding changed their plans', note: 'In the past year: skipped, left early or changed plans for davening, kiddush or a program.' },
+        { key: 'Davens elsewhere at', label: 'Where they daven when not at Darchei Noam', note: "Asked of anyone who isn't there every Shabbat." },
+        { key: 'Why elsewhere', label: 'Why they daven elsewhere', note: "Asked of anyone who isn't there every Shabbat. " + SEVERAL },
+      ]],
+      ['Problems in the current building', PROBLEMS.map((item) => ({ key: 'Problem: ' + item, label: item, kind: 'problem' }))],
+      ['Priorities for the new building', [
+        { key: 'Top three areas', label: 'Top three areas to prioritize', note: 'Each person picked three.' },
+        { key: 'Sanctuary seating', label: 'Sanctuary seating needed' },
+        { key: 'Outcomes', label: 'Outcomes that matter most', note: 'Up to three per person.' },
+      ]],
+      ['How important each space is', SPACES.map((item) => ({ key: 'Importance: ' + item, label: item, kind: 'importance' }))],
+      ['Simchas and events', [
+        { key: 'Hosted a simcha', label: 'Hosted a simcha in the past three years' },
+        { key: 'Hosted what', label: 'What they hosted', note: 'Of those who hosted a simcha. ' + SEVERAL },
+        { key: 'Hosted where', label: 'Where they hosted', note: 'Of those who hosted a simcha. ' + SEVERAL },
+        { key: 'Why not at Darchei Noam', label: 'What kept them from hosting at Darchei Noam', note: 'Of those who hosted somewhere else. ' + SEVERAL },
+        { key: 'Bar/bat mitzvah in 10 years', label: 'Expect a bar or bat mitzvah in the next ten years' },
+        { key: 'Guests needed', label: 'Guests the social hall would need to hold' },
+        { key: 'Would rent larger space', label: 'Would use or rent a larger event space' },
+      ]],
+      ['Non-members', [
+        { key: 'Why not a member', label: "Why they aren't members", note: NON + ' ' + SEVERAL },
+        { key: 'Would join with more space', label: 'Would join if there were more space', note: NON },
+      ]],
+      ['Building fund (members)', [
+        { key: 'Fund familiarity', label: 'Familiarity with the building fund', note: MEM },
+        { key: 'Knew $10,000 ask', label: 'Knew the per-family ask before the survey', note: MEM },
+        { key: 'Household contributed', label: 'Household has contributed so far', note: MEM },
+        { key: 'Likely to give', label: 'Likely to give once plans are final', note: MEM },
+        { key: 'Would help giving', label: 'What would make them more likely to give', note: MEM + ' ' + SEVERAL },
+        ...STATEMENTS.map((s) => ({ key: 'Agree: ' + s, label: '"' + s + '"', kind: 'agree', note: MEM })),
+      ]],
+      ['Staying informed', [
+        { key: 'Update channels', label: 'How they want updates', note: SEVERAL },
+        { key: 'Update types', label: 'Most useful kinds of updates', note: 'Up to three per person.' },
+      ]],
+    ];
+    const QUESTIONS = new Map();
+    SECTIONS.forEach(([section, list]) => list.forEach((q) => QUESTIONS.set(q.key, { section, kind: 'plain', ...q })));
+
+    const g = (id, label, any, title) => ({ id, label, any, title: title || label });
+    const DIMS = [
+      { id: 'mem', label: 'Membership', q: 'Membership', split: ['member', 'regular', 'occasional', 'former'], groups: [
+        g('member', 'Members', [MEMBER]),
+        g('non', 'Non-members and former members', [REGULAR, OCCASIONAL, FORMER]),
+        g('regular', 'Non-members who come regularly', [REGULAR]),
+        g('occasional', 'Non-members who come occasionally', [OCCASIONAL]),
+        g('former', 'Former members', [FORMER]),
+      ] },
+      { id: 'kids', label: 'Children at home', q: 'Children at home', split: ['none', 'u3', 'pk', 'k3', 'm8', 'hs', 'o18'],
+        note: 'Parents with children in more than one age group count in each of those columns.', groups: [
+        g('any', 'Any children at home', AGES, 'People with children at home'),
+        g('none', 'No children at home', ['No children living at home'], 'People with no children at home'),
+        g('u3', 'Children under 3', ['Under 3'], 'People with children under 3'),
+        g('pk', 'Children age 3 through pre-K', ['Age 3 through pre-K'], 'People with children age 3 through pre-K'),
+        g('k3', 'Children in K through 3rd grade', ['Kindergarten through 3rd grade'], 'People with children in K through 3rd grade'),
+        g('m8', 'Children in 4th through 8th grade', ['4th through 8th grade'], 'People with children in 4th through 8th grade'),
+        g('hs', 'Children in high school', ['High school'], 'People with children in high school'),
+        g('o18', 'Children over 18 at home', ['Over 18'], 'People with children over 18 at home'),
+      ] },
+      { id: 'gender', label: 'Gender', q: 'Gender', split: ['men', 'women'], groups: [
+        g('men', 'Men', ['Male']),
+        g('women', 'Women', ['Female']),
+      ] },
+      { id: 'age', label: 'Age', q: 'Age', split: ['u30', '30s', '40s', '50s', '60s', '70p'], groups: [
+        g('u40', 'Under 40', ['Under 30', '30–39'], 'People under 40'),
+        g('40p', '40 and older', ['40–49', '50–59', '60–69', '70 or older'], 'People 40 and older'),
+        g('u30', 'Under 30', ['Under 30'], 'People under 30'),
+        g('30s', '30–39', ['30–39'], 'People age 30–39'),
+        g('40s', '40–49', ['40–49'], 'People age 40–49'),
+        g('50s', '50–59', ['50–59'], 'People age 50–59'),
+        g('60s', '60–69', ['60–69'], 'People age 60–69'),
+        g('70p', '70 or older', ['70 or older'], 'People 70 or older'),
+      ] },
+      { id: 'years', label: 'Years in the community', q: 'Years in community', split: ['y0', 'y1', 'y4', 'y8', 'y15'], groups: [
+        g('u4', 'Under 4 years', ['Less than 1 year', '1–3 years'], 'In the community under 4 years'),
+        g('4p', '4 or more years', ['4–7 years', '8–15 years', 'More than 15 years'], 'In the community 4 or more years'),
+        g('y0', 'Less than 1 year', ['Less than 1 year'], 'In the community less than 1 year'),
+        g('y1', '1–3 years', ['1–3 years'], 'In the community 1–3 years'),
+        g('y4', '4–7 years', ['4–7 years'], 'In the community 4–7 years'),
+        g('y8', '8–15 years', ['8–15 years'], 'In the community 8–15 years'),
+        g('y15', 'More than 15 years', ['More than 15 years'], 'In the community more than 15 years'),
+      ] },
+      { id: 'minyan', label: 'Usual Shabbat morning minyan', q: 'Usual minyan', split: ['715', '815', '900', 'groups', 'social', 'away', 'rarely'], groups: [
+        g('715', '7:15 Main Sanctuary', ['7:15 in Main Sanctuary'], 'Usually at the 7:15 minyan'),
+        g('815', '8:15 Annex', ['8:15 in Annex'], 'Usually at the 8:15 Annex minyan'),
+        g('900', '9:00 Main Sanctuary', ['9:00 in Main Sanctuary'], 'Usually at the 9:00 minyan'),
+        g('groups', 'Groups or Tot Shabbat only', ['I usually come for Groups/Tot Shabbat only'], 'Usually come for Groups or Tot Shabbat only'),
+        g('social', 'Socializing only', ['I usually come for socialization purposes only'], 'Usually come to socialize only'),
+        g('away', 'Another shul', ['I usually daven at another shul on Shabbat morning'], 'Usually daven at another shul'),
+        g('rarely', 'Rarely at shul on Shabbat', ['I rarely go to a shul on Shabbat'], 'Rarely at shul on Shabbat'),
+      ] },
+      { id: 'freq', label: 'Shabbat mornings a month', q: 'Shabbat mornings a month', split: ['every', 'f3', 'f2', 'f1', 'less'], groups: [
+        g('3p', 'Three or more a month', ['Every Shabbat', '3'], 'At Darchei Noam three or more Shabbat mornings a month'),
+        g('2m', 'Two or fewer a month', ['2', '1', 'Fewer than one a month'], 'At Darchei Noam two or fewer Shabbat mornings a month'),
+        g('every', 'Every Shabbat', ['Every Shabbat'], 'At Darchei Noam every Shabbat'),
+        g('f3', '3 a month', ['3'], 'At Darchei Noam 3 Shabbat mornings a month'),
+        g('f2', '2 a month', ['2'], 'At Darchei Noam 2 Shabbat mornings a month'),
+        g('f1', '1 a month', ['1'], 'At Darchei Noam 1 Shabbat morning a month'),
+        g('less', 'Less than once a month', ['Fewer than one a month'], 'At Darchei Noam less than once a month'),
+      ] },
+      { id: 'walk', label: 'Walk to shul', q: 'Walk', split: ['w10', 'w20', 'w30', 'w30p'], groups: [
+        g('u20', 'Under 20 minutes', ['Under 10 minutes', '10–20 minutes'], 'Live under a 20-minute walk away'),
+        g('20p', '20 minutes or more', ['20–30 minutes', 'More than 30 minutes'], 'Live a 20-minute walk or more away'),
+        g('w10', 'Under 10 minutes', ['Under 10 minutes'], 'Live under a 10-minute walk away'),
+        g('w20', '10–20 minutes', ['10–20 minutes'], 'Live a 10–20 minute walk away'),
+        g('w30', '20–30 minutes', ['20–30 minutes'], 'Live a 20–30 minute walk away'),
+        g('w30p', 'More than 30 minutes', ['More than 30 minutes'], 'Live more than a 30-minute walk away'),
+      ] },
+      { id: 'bm', label: 'Bar or bat mitzvah in the next ten years', q: 'Bar/bat mitzvah in 10 years', split: ['yes', 'maybe', 'no'], groups: [
+        g('yes', 'Expecting one', ['Yes'], 'Expecting a bar or bat mitzvah in the next ten years'),
+        g('maybe', 'Maybe', ['Maybe'], 'Maybe expecting a bar or bat mitzvah'),
+        g('no', 'Not expecting one', ['No'], 'Not expecting a bar or bat mitzvah'),
+      ] },
+      { id: 'hosted', label: 'Hosted a simcha in the past three years', q: 'Hosted a simcha', split: ['yes', 'no'], groups: [
+        g('yes', 'Hosted a simcha', ['Yes'], 'Hosted a simcha in the past three years'),
+        g('no', "Hasn't hosted one", ['No'], "Haven't hosted a simcha in the past three years"),
+      ] },
+      { id: 'gave', label: 'Household has given to the building fund', q: 'Household contributed', split: ['yes', 'plan', 'no'], groups: [
+        g('yes', 'Has given', ['Yes'], 'Households that have given to the building fund'),
+        g('plan', 'Plans to give', ['Not yet, but we plan to'], 'Households that plan to give'),
+        g('no', "Hasn't given", ['No'], "Households that haven't given"),
+      ] },
+    ];
+    const DIM = new Map(DIMS.map((d) => [d.id, d]));
+    const GROUP = new Map();
+    DIMS.forEach((d) => d.groups.forEach((gr) => GROUP.set(d.id + ':' + gr.id, { ...gr, dim: d })));
+
+    const indexCache = new WeakMap();
+    const index = (rows) => {
+      if (indexCache.has(rows)) return indexCache.get(rows);
+      const people = new Map();
+      for (const r of rows) {
+        if (!people.has(r.respondent)) people.set(r.respondent, new Map());
+        const person = people.get(r.respondent);
+        if (!person.has(r.question)) person.set(r.question, new Set());
+        person.get(r.question).add(r.answer);
+      }
+      const out = { people, ids: [...people.keys()].sort((a, b) => a - b) };
+      indexCache.set(rows, out);
+      return out;
+    };
+    const inGroup = (idx, id, group) => {
+      const answers = idx.people.get(id)?.get(group.dim.q);
+      return Boolean(answers) && group.any.some((a) => answers.has(a));
+    };
+    const label = (value) => SHORT[value] || value;
+
+    const column = (idx, q, ids, extra) => {
+      const answered = [];
+      let notApply = 0;
+      for (const id of ids) {
+        const answers = idx.people.get(id)?.get(q.key);
+        if (!answers || answers.size === 0) continue;
+        if (q.kind === 'problem' && answers.has(NOT_APPLY)) { notApply += 1; continue; }
+        answered.push(answers);
+      }
+      const counts = new Map();
+      answered.forEach((set) => set.forEach((a) => counts.set(a, (counts.get(a) || 0) + 1)));
+      return { ...extra, people: ids.length, base: answered.length, notApply, counts };
+    };
+
+    const options = (q, baseCol) => {
+      const fixed = KIND_ORDER[q.kind] || ORDER[q.key];
+      const seen = [...baseCol.counts.keys()];
+      const byCount = (a, b) => (LAST.includes(a) - LAST.includes(b)) || (baseCol.counts.get(b) || 0) - (baseCol.counts.get(a) || 0) || a.localeCompare(b);
+      if (!fixed) return seen.sort(byCount);
+      return [...fixed, ...seen.filter((v) => !fixed.includes(v)).sort(byCount)];
+    };
+
+    const build = (rows, p) => {
+      const idx = index(rows);
+      const q = QUESTIONS.get(p.xq) || QUESTIONS.get(DEFAULT_Q);
+      const filter = GROUP.get(p.xf || '') || null;
+      const baseIds = filter ? idx.ids.filter((id) => inGroup(idx, id, filter)) : idx.ids;
+      const cols = [column(idx, q, baseIds, { label: filter ? filter.title : 'Everyone', isBase: true })];
+      let by = null;
+      let dimNote = '';
+      if (String(p.xby || '').startsWith('all:') && DIM.get(p.xby.slice(4))) {
+        const dim = DIM.get(p.xby.slice(4));
+        by = { kind: 'all', dim };
+        dimNote = dim.note || '';
+        dim.split.forEach((gid) => {
+          const gr = GROUP.get(dim.id + ':' + gid);
+          cols.push(column(idx, q, baseIds.filter((id) => inGroup(idx, id, gr)), { label: gr.label }));
+        });
+      } else if (GROUP.get(p.xby || '')) {
+        const gr = GROUP.get(p.xby);
+        by = { kind: 'one', group: gr };
+        cols.push(column(idx, q, baseIds.filter((id) => inGroup(idx, id, gr)), { label: gr.label }));
+        cols.push(column(idx, q, baseIds.filter((id) => !inGroup(idx, id, gr)), { label: 'Everyone else' }));
+      }
+      const opts = options(q, cols[0]);
+      const derived = DERIVED[q.kind] || null;
+      return { q, filter, by, dimNote, cols, opts, derived };
+    };
+
+    const share = (col, values) => {
+      const n = values.reduce((s, v) => s + (col.counts.get(v) || 0), 0);
+      return { n, share: col.base ? n / col.base : 0 };
+    };
+
+    return { SECTIONS, DIMS, QUESTIONS, GROUP, DIM, DEFAULT_Q, MIN_SHOWN, FEW, NOT_APPLY, index, inGroup, build, share, label };
+  })();
+
+  dash.draw('explore', (el) => {
+    const rows = dnKit.ready(el, 'exploreAnswers');
+    if (!rows) return;
+    const X = window.dnExplore;
+    const p = dash.params();
+    const r = X.build(rows, p);
+    const { q, cols, opts, derived } = r;
+    const parts = [];
+
+    const head = document.createElement('div');
+    head.className = 'dn-x-head';
+    const title = document.createElement('h4');
+    title.className = 'dn-x-title';
+    title.textContent = q.label;
+    const sub = document.createElement('p');
+    sub.className = 'dn-x-sub';
+    const who = r.filter ? r.filter.title : 'Everyone';
+    const how = !r.by ? '' : r.by.kind === 'all' ? ' · compared by ' + r.by.dim.label.toLowerCase() : ' · ' + r.by.group.label + ' compared with everyone else';
+    sub.textContent = who + how;
+    head.append(title, sub);
+    parts.push(head);
+
+    const base = cols[0];
+    const notes = [];
+    if (base.base < X.MIN_SHOWN) {
+      parts.push(dnKit.base(base.base === 0 ? 'Nobody in this group has answered this question yet.' : 'Fewer than ' + X.MIN_SHOWN + ' people in this group answered this question, too few to show.'));
+      el.replaceChildren(...parts);
+      return;
+    }
+    const shown = cols.filter((c, i) => i === 0 || c.base >= X.MIN_SHOWN);
+    const hidden = cols.filter((c, i) => i > 0 && c.base < X.MIN_SHOWN);
+    const lineFor = (c) => (q.kind === 'problem' ? 'it applies to' : 'who answered');
+
+    if (shown.length === 1) {
+      const c = dnKit.color();
+      const bars = document.createElement('div');
+      bars.className = 'dn-bars';
+      const rowsOut = [];
+      if (derived) {
+        const s = X.share(base, derived.parts);
+        const row = dnKit.barRow(bars, derived.label, dnKit.fmtPct(s.share) + ' · ' + dnKit.fmtInt(s.n), [{ share: s.share, color: c }], [derived.label, dnKit.fmtInt(s.n) + ' of ' + dnKit.fmtInt(base.base) + ' ' + lineFor(base), dnKit.fmtPct(s.share)]);
+        row.classList.add('dn-x-derived');
+        rowsOut.push(row);
+      }
+      opts.forEach((o) => {
+        const s = X.share(base, [o]);
+        rowsOut.push(dnKit.barRow(bars, X.label(o), dnKit.fmtPct(s.share) + ' · ' + dnKit.fmtInt(s.n), [{ share: s.share, color: c, opacity: derived ? 0.55 : null }], [X.label(o), dnKit.fmtInt(s.n) + ' of ' + dnKit.fmtInt(base.base) + ' ' + lineFor(base), dnKit.fmtPct(s.share)]));
+      });
+      bars.append(...rowsOut);
+      parts.push(bars);
+      let line = (q.kind === 'problem' ? 'Applies to ' : 'Answered by ') + dnKit.fmtInt(base.base);
+      if (q.kind === 'problem' && base.notApply) line += '; ' + dnKit.fmtInt(base.notApply) + " said it doesn't apply to them and aren't counted";
+      parts.push(dnKit.base(line));
+    } else {
+      const scroll = document.createElement('div');
+      scroll.className = 'dn-x-scroll';
+      scroll.tabIndex = 0;
+      scroll.setAttribute('role', 'region');
+      scroll.setAttribute('aria-label', 'Comparison table, scrolls sideways');
+      const table = document.createElement('table');
+      table.className = 'dn-x-table';
+      const thead = document.createElement('thead');
+      const hr = document.createElement('tr');
+      const corner = document.createElement('th');
+      corner.scope = 'col';
+      corner.textContent = 'Answer';
+      hr.append(corner);
+      shown.forEach((col) => {
+        const th = document.createElement('th');
+        th.scope = 'col';
+        if (col.isBase) th.className = 'is-base';
+        const name = document.createElement('span');
+        name.className = 'dn-x-col';
+        name.textContent = col.label;
+        const n = document.createElement('span');
+        n.className = 'dn-x-n';
+        n.textContent = dnKit.fmtInt(col.base) + (q.kind === 'problem' ? ' it applies to' : ' answered');
+        th.append(name, n);
+        if (!col.isBase && col.base < X.FEW) {
+          const chip = document.createElement('span');
+          chip.className = 'dn-chip';
+          chip.textContent = 'Few responses';
+          th.append(chip);
+        }
+        hr.append(th);
+      });
+      thead.append(hr);
+      const tbody = document.createElement('tbody');
+      const addRow = (name, values, cls) => {
+        const tr = document.createElement('tr');
+        if (cls) tr.className = cls;
+        const th = document.createElement('th');
+        th.scope = 'row';
+        th.textContent = name;
+        tr.append(th);
+        shown.forEach((col) => {
+          const s = X.share(col, values);
+          const td = document.createElement('td');
+          if (col.isBase) td.className = 'is-base';
+          const cell = document.createElement('div');
+          cell.className = 'dn-x-cell';
+          const val = document.createElement('span');
+          val.className = 'dn-x-val';
+          val.textContent = dnKit.fmtPct(s.share);
+          const bar = document.createElement('span');
+          bar.className = 'dn-x-bar';
+          const fill = document.createElement('i');
+          fill.style.width = Math.max(0, Math.min(1, s.share)) * 100 + '%';
+          bar.append(fill);
+          cell.append(val, bar);
+          td.append(cell);
+          const lines = [col.label, name, dnKit.fmtInt(s.n) + ' of ' + dnKit.fmtInt(col.base) + ' ' + lineFor(col) + ' · ' + dnKit.fmtPct(s.share)];
+          if (!col.isBase) {
+            const b = X.share(shown[0], values);
+            const diff = Math.round((s.share - b.share) * 100);
+            lines.push((diff === 0 ? 'Same as ' : Math.abs(diff) + ' points ' + (diff > 0 ? 'higher' : 'lower') + ' than ') + shown[0].label.toLowerCase());
+          }
+          td.addEventListener('mousemove', (e) => dnKit.tip(el, e, lines));
+          td.addEventListener('click', (e) => dnKit.tip(el, e, lines));
+          td.addEventListener('mouseleave', () => dnKit.untip(el));
+          tr.append(td);
+        });
+        tbody.append(tr);
+      };
+      if (derived) addRow(derived.label, derived.parts, 'is-derived');
+      opts.forEach((o) => addRow(X.label(o), [o]));
+      if (q.kind === 'problem') {
+        const tr = document.createElement('tr');
+        tr.className = 'is-aside';
+        const th = document.createElement('th');
+        th.scope = 'row';
+        th.textContent = "Said it doesn't apply (not counted)";
+        tr.append(th);
+        shown.forEach((col) => {
+          const td = document.createElement('td');
+          if (col.isBase) td.className = 'is-base';
+          td.textContent = dnKit.fmtInt(col.notApply) + (col.notApply === 1 ? ' person' : ' people');
+          tr.append(td);
+        });
+        tbody.append(tr);
+      }
+      table.append(thead, tbody);
+      scroll.append(table);
+      if (shown.length > 2) {
+        const swipe = document.createElement('p');
+        swipe.className = 'dn-x-swipe';
+        swipe.textContent = 'Swipe the table sideways to see every group.';
+        parts.push(swipe);
+      }
+      parts.push(scroll);
+      notes.push('Each column shows shares of the people in that group ' + (q.kind === 'problem' ? 'the item applies to.' : 'who answered.') + ' Hover over or tap a number to compare it with ' + shown[0].label.toLowerCase() + '.');
+    }
+    if (q.note) notes.push(q.note);
+    if (q.kind === 'problem' && shown.length > 1) notes.push('As on the rest of the dashboard, people who said an item doesn\'t apply to them are left out of its shares.');
+    if (r.dimNote) notes.push(r.dimNote);
+    if (hidden.length) notes.push('Not shown, with fewer than ' + X.MIN_SHOWN + ' people answering: ' + hidden.map((c) => c.label).join(', ') + '.');
+    if (shown.some((c) => !c.isBase && c.base < X.FEW)) notes.push('"Few responses" marks groups with fewer than ' + X.FEW + ' people answering; read their numbers loosely.');
+    if (notes.length) {
+      const ul = document.createElement('ul');
+      ul.className = 'dn-x-notes';
+      notes.forEach((t) => { const li = document.createElement('li'); li.textContent = t; ul.append(li); });
+      parts.push(ul);
+    }
+    el.replaceChildren(...parts);
+  });
+
+  dash.draw('explore-comments', (el) => {
+    const comments = dnKit.ready(el, 'comments');
+    if (!comments) return;
+    const ea = dash.data('exploreAnswers');
+    if (ea.status !== 'ok') { el.classList.add('dash-skeleton'); el.replaceChildren(); return; }
+    const X = window.dnExplore;
+    const idx = X.index(ea.data || []);
+    const p = dash.params();
+    const parts = [];
+    let list = comments;
+    const group = X.GROUP.get(p.xcf || '') || null;
+    if (group) {
+      const ids = new Set(idx.ids.filter((id) => X.inGroup(idx, id, group)));
+      if (ids.size < X.MIN_SHOWN) {
+        el.replaceChildren(dnKit.base('Comments are only shown for groups of ' + X.MIN_SHOWN + ' or more people. Pick a larger group.'));
+        return;
+      }
+      list = list.filter((c) => ids.has(c.respondent));
+    }
+    if (p.xt === '__new') list = list.filter((c) => !c.coded);
+    else if (p.xt) list = list.filter((c) => c.themeKeys.split(' ').includes(p.xt));
+    if (p.xcq) list = list.filter((c) => c.question === p.xcq);
+    const norm = (s) => String(s).toLowerCase().replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
+    const words = norm(p.xs || '').trim();
+    if (words) list = list.filter((c) => norm(c.comment).includes(words));
+
+    const count = document.createElement('p');
+    count.className = 'dn-x-count';
+    count.textContent = list.length === 1 ? '1 comment' : dnKit.fmtInt(list.length) + ' comments';
+    parts.push(count);
+    if (list.length === 0) {
+      parts.push(dnKit.base('No comments match. Try another theme, question or group, or fewer words.'));
+      el.replaceChildren(...parts);
+      return;
+    }
+    const box = document.createElement('div');
+    box.className = 'dn-theme-comments dn-x-comments';
+    const ul = document.createElement('ul');
+    const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    for (const cm of list) {
+      const li = document.createElement('li');
+      li.dataset.key = String(cm.id);
+      const text = document.createElement('p');
+      text.className = 'dn-cmt-text';
+      if (words) {
+        const source = String(cm.comment);
+        const lower = norm(source);
+        let at = 0;
+        const re = new RegExp(escape(words), 'g');
+        let m;
+        while ((m = re.exec(lower))) {
+          if (m.index > at) text.append(document.createTextNode(source.slice(at, m.index)));
+          const mark = document.createElement('mark');
+          mark.textContent = source.slice(m.index, m.index + words.length);
+          text.append(mark);
+          at = m.index + words.length;
+        }
+        if (at < source.length) text.append(document.createTextNode(source.slice(at)));
+      } else {
+        text.textContent = cm.comment;
+      }
+      const meta = document.createElement('span');
+      meta.className = 'dn-cmt-meta';
+      meta.textContent = cm.question + ' · ' + cm.themes;
+      li.append(text, meta);
+      ul.append(li);
+    }
+    box.append(ul);
+    parts.push(box);
+    el.replaceChildren(...parts);
+  });
 </script>
 <script>
-  const dnPages = ['responding', 'readout', 'comments', 'fund'];
+  const dnPages = ['responding', 'readout', 'comments', 'fund', 'explore'];
   const dnShow = (id) => {
     document.querySelectorAll('.dn-page').forEach((s) => { s.hidden = s.id !== id; });
     document.querySelectorAll('.dn-tab').forEach((b) => { b.setAttribute('aria-selected', String(b.dataset.tab === id)); });
@@ -1359,6 +1994,73 @@
   });
   dnStory(dash.params().story);
   dash.onData(() => dnStory(dash.params().story));
+
+  (() => {
+    const X = window.dnExplore;
+    const qSel = document.getElementById('xq-select');
+    const bySel = document.getElementById('xby-select');
+    const fSel = document.getElementById('xf-select');
+    const tSel = document.getElementById('xt-select');
+    const cqSel = document.getElementById('xcq-select');
+    const cfSel = document.getElementById('xcf-select');
+    const search = document.getElementById('xs-input');
+    if (!X || !qSel || !bySel || !fSel || !tSel || !cqSel || !cfSel || !search) return;
+    const opt = (value, text) => { const o = document.createElement('option'); o.value = value; o.textContent = text; return o; };
+    const group = (label, children) => { const el = document.createElement('optgroup'); el.label = label; el.append(...children); return el; };
+    X.SECTIONS.forEach(([section, list]) => qSel.append(group(section, list.map((q) => opt(q.key, q.label)))));
+    bySel.append(opt('', 'No comparison'));
+    X.DIMS.forEach((d) => bySel.append(group(d.label, [opt('all:' + d.id, 'All groups side by side'), ...d.groups.map((gr) => opt(d.id + ':' + gr.id, gr.label + ' vs. everyone else'))])));
+    [fSel, cfSel].forEach((sel) => {
+      sel.append(opt('', 'Everyone'));
+      X.DIMS.forEach((d) => sel.append(group(d.label, d.groups.map((gr) => opt(d.id + ':' + gr.id, gr.label)))));
+    });
+
+    const setSel = (sel, value) => { const v = value ?? ''; if ([...sel.options].some((o) => o.value === v)) sel.value = v; };
+    const sync = () => {
+      const p = dash.params();
+      setSel(qSel, p.xq || X.DEFAULT_Q);
+      setSel(bySel, p.xby);
+      setSel(fSel, p.xf);
+      setSel(tSel, p.xt);
+      setSel(cqSel, p.xcq);
+      setSel(cfSel, p.xcf);
+      if (document.activeElement !== search) search.value = p.xs ?? '';
+    };
+    const fillThemes = () => {
+      if (tSel.dataset.filled) return;
+      const d = dash.data('themeCounts');
+      if (d.status !== 'ok') return;
+      const rows = (d.data || []).filter((r) => r.question === 'All questions' && r.n > 0);
+      tSel.append(...rows.map((r) => opt(r.theme, r.label + ' (' + dnKit.fmtInt(r.n) + ')')));
+      const cd = dash.data('comments');
+      const untagged = cd.status === 'ok' ? (cd.data || []).filter((c) => !c.coded).length : 0;
+      if (untagged) tSel.append(opt('__new', 'Not yet themed (' + dnKit.fmtInt(untagged) + ')'));
+      tSel.dataset.filled = '1';
+    };
+    const put = (next) => { dash.setParams(next); sync(); };
+    [[qSel, 'xq'], [bySel, 'xby'], [fSel, 'xf'], [tSel, 'xt'], [cqSel, 'xcq'], [cfSel, 'xcf']].forEach(([sel, key]) => {
+      sel.addEventListener('change', () => put({ [key]: sel.value || null }));
+    });
+    let typing = null;
+    search.addEventListener('input', () => {
+      clearTimeout(typing);
+      typing = setTimeout(() => dash.setParams({ xs: search.value.trim() || null }), 300);
+    });
+    document.getElementById('x-reset')?.addEventListener('click', () => put({ xq: null, xby: null, xf: null }));
+    document.getElementById('xc-reset')?.addEventListener('click', () => { search.value = ''; put({ xt: null, xcq: null, xcf: null, xs: null }); });
+    document.querySelectorAll('.dn-x-chip').forEach((b) => {
+      b.addEventListener('click', () => {
+        let next = {};
+        try { next = JSON.parse(b.dataset.params || '{}'); } catch (e) { return; }
+        if ('xs' in next) search.value = next.xs || '';
+        put(next);
+        const target = document.getElementById(b.dataset.target || '');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    sync();
+    dash.onData(() => { fillThemes(); sync(); });
+  })();
 </script>
 <script>
   dash.__start({ responses: 'data/survey-responses.json', codes: 'data/comment-codes.json', themes: 'data/comment-themes.json' });
